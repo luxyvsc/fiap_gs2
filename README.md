@@ -1,32 +1,35 @@
-# SymbioWork - POC Futuro do Trabalho
+# FIAP AI-Enhanced Learning Platform - POC Futuro do Trabalho
 
 ## 🚀 Visão Geral
 
-**SymbioWork** é um ecossistema inovador de assistentes de IA e ambientes de trabalho adaptativos que torna o trabalho mais humano, inclusivo e sustentável. O projeto utiliza agentes inteligentes como "companheiros de trabalho" (peer agents) que priorizam bem-estar, inclusão e práticas sustentáveis no ambiente corporativo do futuro.
+**FIAP AI-Enhanced Learning Platform** é uma plataforma inovadora que utiliza agentes de IA e gamificação para transformar a experiência educacional na FIAP. O projeto foca em **bots e agentes inteligentes como parceiros de produtividade** e **soluções gamificadas para engajamento e aprendizado corporativo**.
 
 ### Objetivo
 
-Responder ao desafio FIAP GS 2025.2: **"Como a tecnologia pode tornar o trabalho mais humano, inclusivo e sustentável no futuro?"**
+Responder ao desafio FIAP GS 2025.2: **"Como a tecnologia pode tornar o trabalho mais humano, inclusivo e sustentável no futuro?"** através da modernização do sistema educacional da FIAP com IA e gamificação.
 
 ## 🎯 Principais Funcionalidades
 
-- **Ambientes de Trabalho Imersivos**: Coworking virtual adaptativo com controle inteligente de ambiente
-- **Monitoramento de Bem-Estar**: Análise preditiva de saúde mental e física no trabalho
-- **Agentes de Produtividade**: Assistentes IA que otimizam tarefas e sugerem pausas inteligentes
-- **Recrutamento Inclusivo**: IA explicável para seleção ética e diversa
-- **Sustentabilidade Laboral**: Medição e otimização do impacto ambiental do trabalho
-- **Gamificação Corporativa**: Engajamento através de desafios e aprendizado contínuo
+- **Code Review Inteligente**: Integração com GitHub API para análise automatizada de código com feedback personalizado
+- **Correção Automatizada com IA**: Agentes criam metodologias, corrigem trabalhos e geram feedback para aprovação do professor
+- **Sistema de Premiação Transparente**: Metodologias objetivas e claras geradas por IA para competições e rankings
+- **Gerador de Conteúdo Educacional**: Criação de vídeos e materiais usando Veo3, NotebookLM, Grok e outras IAs
+- **Gestão de Iniciação Científica**: Sistema integrado para coordenadores administrarem grupos sem exclusões
+- **Provas Gamificadas Inclusivas**: Avaliações adaptativas e acessíveis para estudantes com dislexia
+- **Revisão Contínua de Conteúdo**: Agentes de IA checam fontes, corrigem erros e mantêm materiais atualizados
+- **Interface de Aprovação/Edição**: Controle humano sobre todas as ações dos agentes de IA
+- **Frontend Moderno**: Tema claro/escuro e experiência de usuário otimizada
 
 ## 🏗️ Arquitetura
 
 ### Stack Tecnológico
 
-- **Frontend**: Flutter (Microfrontends/Microservices)
+- **Frontend**: Flutter (Web/Mobile/Desktop) com tema claro/escuro
 - **Backend**: Python (Microservices Serverless)
-- **Agentes IA**: CrewAI para orquestração de agentes inteligentes
+- **Agentes IA**: CrewAI para orquestração de múltiplos agentes especializados
 - **Infraestrutura**: Serverless (AWS Lambda/Google Cloud Functions/Azure Functions)
 - **Database**: Serverless (DynamoDB/Aurora Serverless/Firebase)
-- **Analytics**: Python + R para análise estatística
+- **Integrações**: GitHub API, Veo3, NotebookLM, Grok, APIs de geração de conteúdo
 
 ### Estrutura de Pastas
 
@@ -39,15 +42,16 @@ fiap_gs2/
 │   └── delivery-guidelines.md
 ├── src/                 # Código-fonte dividido por apps
 │   └── apps/
-│       ├── frontend_flutter/        # Frontend Flutter
-│       ├── auth_service/            # Autenticação e autorização
-│       ├── wellbeing_service/       # Monitoramento de bem-estar
-│       ├── collaboration_service/   # Ambientes colaborativos
-│       ├── recruitment_service/     # Recrutamento inclusivo
-│       ├── green_work_service/      # Trabalho sustentável
-│       ├── agents_orchestrator/     # Orquestração de agentes IA (CrewAI)
-│       ├── analytics_service/       # Análise de dados e ML
-│       └── dashboard_service/       # Dashboard e visualizações
+│       ├── frontend_flutter/          # Frontend Flutter (Web/Mobile)
+│       ├── auth_service/              # Autenticação e autorização
+│       ├── code_review_agent/         # Agente de code review (GitHub API)
+│       ├── grading_agent/             # Agente de correção automatizada
+│       ├── award_methodology_agent/   # Agente de metodologia de premiação
+│       ├── content_generator_agent/   # Gerador de conteúdo educacional
+│       ├── research_management/       # Gestão de iniciação científica
+│       ├── gamified_exams/            # Sistema de provas gamificadas
+│       ├── content_reviewer_agent/    # Agente de revisão de conteúdo
+│       └── approval_interface/        # Interface de aprovação/edição
 └── .github/
     └── copilot-instructions.md      # Instruções para colaboradores
 ```
@@ -56,15 +60,15 @@ fiap_gs2/
 
 Este projeto integra todas as disciplinas do curso:
 
-- **AICSS**: Assistentes críticos e sociais, políticas de uso responsável de IA
-- **Cybersecurity**: Autenticação, proteção de dados sensíveis, auditoria
-- **Machine Learning**: Modelos preditivos para bem-estar e produtividade
-- **Redes Neurais**: Detecção de padrões em comportamento e saúde mental
-- **Linguagem R**: Análise estatística e visualizações
-- **Python**: Backend, pipelines de dados, automações
-- **Computação em Nuvem**: Arquitetura serverless e escalável
-- **Banco de Dados**: Modelagem híbrida (NoSQL + SQL serverless)
-- **Formação Social**: Análise de impacto social, inclusão e ética
+- **AICSS**: Agentes de IA para educação, ética e transparência em avaliações
+- **Cybersecurity**: Autenticação segura, proteção de dados de alunos, auditoria
+- **Machine Learning**: Modelos para análise de código, detecção de plágio, personalização
+- **Redes Neurais**: NLP para análise de textos, geração de feedback, QA automático
+- **Linguagem R**: Análise estatística de desempenho e engajamento
+- **Python**: Backend serverless, agentes de IA, integrações
+- **Computação em Nuvem**: Arquitetura serverless escalável e custo-efetiva
+- **Banco de Dados**: Modelagem de dados acadêmicos e históricos
+- **Formação Social**: Inclusão (dislexia), transparência, impacto educacional
 
 ## 🚀 Como Começar
 
@@ -82,15 +86,16 @@ Para detalhes completos sobre configuração, desenvolvimento e contribuição, 
 
 Cada aplicação possui seu próprio roadmap detalhado em `src/apps/<app_name>/roadmap.md`:
 
-- [Frontend Flutter](src/apps/frontend_flutter/roadmap.md)
-- [Auth Service](src/apps/auth_service/roadmap.md)
-- [Wellbeing Service](src/apps/wellbeing_service/roadmap.md)
-- [Collaboration Service](src/apps/collaboration_service/roadmap.md)
-- [Recruitment Service](src/apps/recruitment_service/roadmap.md)
-- [Green Work Service](src/apps/green_work_service/roadmap.md)
-- [Agents Orchestrator](src/apps/agents_orchestrator/roadmap.md)
-- [Analytics Service](src/apps/analytics_service/roadmap.md)
-- [Dashboard Service](src/apps/dashboard_service/roadmap.md)
+- [Frontend Flutter](src/apps/frontend_flutter/roadmap.md) - Interface com tema claro/escuro
+- [Auth Service](src/apps/auth_service/roadmap.md) - Autenticação e autorização
+- [Code Review Agent](src/apps/code_review_agent/roadmap.md) - Análise inteligente via GitHub
+- [Grading Agent](src/apps/grading_agent/roadmap.md) - Correção automatizada
+- [Award Methodology Agent](src/apps/award_methodology_agent/roadmap.md) - Sistema de premiação
+- [Content Generator Agent](src/apps/content_generator_agent/roadmap.md) - Geração com Veo3/Grok
+- [Research Management](src/apps/research_management/roadmap.md) - Iniciação científica
+- [Gamified Exams](src/apps/gamified_exams/roadmap.md) - Provas inclusivas
+- [Content Reviewer Agent](src/apps/content_reviewer_agent/roadmap.md) - Revisão contínua
+- [Approval Interface](src/apps/approval_interface/roadmap.md) - Interface de aprovação
 
 ## 🎬 Entrega GS 2025.2
 
