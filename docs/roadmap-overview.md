@@ -2,19 +2,19 @@
 
 ## 📋 Visão Geral do Projeto
 
-**SymbioWork** é um ecossistema de assistentes de IA e ambientes de trabalho adaptativos que promove bem-estar, inclusão e sustentabilidade no trabalho do futuro.
+**SymbioWork** é um ecossistema de assistentes de IA e ambientes de trabalho adaptativos que promove bem-estar, inclusão e sustentabilidade no trabalho do futuro, com foco especial em educação e desenvolvimento profissional.
 
 ### Proposta de Valor
 
-- **Problema**: O futuro do trabalho precisa equilibrar avanços tecnológicos com humanização, inclusão e sustentabilidade
-- **Solução**: Plataforma serverless com agentes IA inteligentes que atuam como companheiros de trabalho, promovendo bem-estar, produtividade consciente e práticas sustentáveis
-- **Diferencial**: Integração de múltiplos agentes IA especializados (CrewAI) com análise preditiva e ambientes adaptativos
+- **Problema**: O futuro do trabalho precisa equilibrar avanços tecnológicos com humanização, inclusão e sustentabilidade, especialmente na educação onde alunos precisam de suporte personalizado e ético no uso de IA
+- **Solução**: Plataforma serverless com múltiplos agentes IA especializados (CrewAI) que atuam como companheiros educacionais e profissionais, promovendo bem-estar, produtividade consciente e práticas sustentáveis
+- **Diferencial**: Integração de 13+ agentes IA especializados com análise preditiva, detecção de plágio/uso inadequado de IA, geração de conteúdo educacional, e ambientes gamificados
 
 ### MVP - Critérios Mínimos GS
 
 Para garantir nota da GS, o MVP deve incluir:
 
-✅ Aplicação de IA e Machine Learning em múltiplos contextos  
+✅ Aplicação de IA e Machine Learning em múltiplos contextos educacionais  
 ✅ Todas as disciplinas do curso integradas (exceto AI Challenge que é o vídeo)  
 ✅ Coleta, tratamento e análise de dados (simulados ou reais)  
 ✅ Demonstração prática em vídeo de até 7 minutos  
@@ -23,15 +23,86 @@ Para garantir nota da GS, o MVP deve incluir:
 ## 🎯 Objetivos e Metas
 
 ### Objetivo Principal
-Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trabalho mais humano, inclusivo e sustentável.
+Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar a educação e o trabalho mais humanos, inclusivos e éticos.
 
 ### Metas Específicas
-1. Implementar pelo menos 3 agentes IA especializados usando CrewAI
-2. Criar dashboard interativo com visualizações em tempo real
-3. Demonstrar análise preditiva de bem-estar com ML
-4. Implementar sistema de recrutamento inclusivo com IA explicável
-5. Medir e otimizar impacto ambiental do trabalho remoto/híbrido
-6. Gamificar aprendizado e engajamento corporativo
+1. Implementar 13+ agentes IA especializados usando CrewAI
+2. Criar dashboard unificado com visualizações em tempo real
+3. Demonstrar análise preditiva de bem-estar mental e detecção de burnout
+4. Implementar sistema de avaliação automatizada com feedback personalizado
+5. Desenvolver plataforma de exames gamificados acessíveis
+6. Integrar detecção de plágio e uso ético de IA
+7. Criar sistema de geração e revisão de conteúdo educacional
+8. Implementar gestão automatizada de iniciação científica
+
+## 🏗️ Arquitetura de Agentes
+
+### Agentes Core Implementados
+
+#### 🤖 **AI Usage Detection Agent**
+- Detecta uso excessivo/inadequado de ferramentas IA (ChatGPT, Copilot)
+- Analisa padrões de uso ético vs substituição completa
+- Promove aprendizado genuíno
+
+#### ✅ **Approval Interface**
+- Dashboard unificado para aprovações de professores
+- Edição inline de conteúdos gerados por IA
+- Chat com agentes para ajustes
+
+#### 🏆 **Award Methodology Agent**
+- Cria metodologias objetivas para premiações
+- Avaliação transparente com justificativas
+- Rankings explicáveis
+
+#### 🔍 **Code Review Agent**
+- Integração GitHub para reviews automatizados
+- Feedback educacional personalizado
+- Detecção de plágio entre trabalhos
+
+#### 🎬 **Content Generator Agent**
+- Geração de vídeos educacionais (Veo3, Sora)
+- Produção de podcasts (NotebookLM)
+- Criação de materiais de apoio
+
+#### 📝 **Content Reviewer Agent**
+- Revisão automática de conteúdos educacionais
+- Fact-checking e validação de fontes
+- Detecção de material desatualizado
+
+#### 🎓 **Grading Agent**
+- Correção automatizada com rubricas personalizadas
+- Feedback personalizado por aluno
+- Interface de aprovação para professores
+
+#### 🎮 **Gamified Exams**
+- Provas interativas e acessíveis
+- Adaptação para dislexia e necessidades especiais
+- Sistema de pontos e conquistas
+
+#### 🧠 **Mental Health Agent**
+- Monitoramento de indicadores de saúde mental
+- Detecção precoce de burnout e ansiedade
+- Recomendações personalizadas de suporte
+
+#### 🔍 **Plagiarism Detection Agent**
+- Detecção de plágio em código e texto
+- Análise semântica e estrutural
+- Relatórios detalhados de originalidade
+
+#### 🔬 **Research Management**
+- Gestão de projetos de iniciação científica
+- Acompanhamento automático de progresso
+- Alertas para alunos/orientadores sem atividade
+
+#### 🔐 **Auth Service**
+- Autenticação segura com OAuth2
+- Gerenciamento de usuários e permissões
+- JWT stateless
+
+#### 📱 **Frontend Flutter**
+- Interface multi-plataforma responsiva
+- Microfrontends modulares
+- Real-time updates
 
 ## 📅 Roadmap por Sprints
 
@@ -72,144 +143,179 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 **Objetivo**: Implementar monitoramento de bem-estar e ambientes colaborativos
 
 #### Tarefas
-- [ ] Implementar Wellbeing Service
-  - [ ] API para coleta de eventos de bem-estar
+- [ ] Implementar Mental Health Agent
+  - [ ] API para coleta de indicadores comportamentais
   - [ ] Modelo ML para detecção de stress/burnout
   - [ ] Sistema de alertas e recomendações
-  - [ ] Integração com simuladores de biometria
-- [ ] Implementar Collaboration Service
-  - [ ] Gerenciamento de ambientes virtuais
-  - [ ] Sistema de presença e disponibilidade
-  - [ ] Controle de ambiente (iluminação, ruído)
-  - [ ] Chat e comunicação em tempo real
+  - [ ] Dashboard de bem-estar individual/coletivo
+- [ ] Implementar Research Management
+  - [ ] CRUD de projetos de IC
+  - [ ] Sistema de acompanhamento de progresso
+  - [ ] Alertas automáticos para inatividade
+  - [ ] Relatórios para coordenadores
 - [ ] Criar interfaces Flutter para:
   - [ ] Dashboard de bem-estar pessoal
-  - [ ] Ambientes colaborativos virtuais
+  - [ ] Portal de gestão de pesquisa
   - [ ] Visualizações de métricas
 
 **Entregáveis**:
-- Wellbeing Service com modelo ML treinado
-- Collaboration Service funcional
-- Telas de bem-estar e colaboração no Flutter
+- Mental Health Agent com modelo ML treinado
+- Research Management funcional
+- Telas de bem-estar e pesquisa no Flutter
 
 **Critérios de Aceitação**:
-- Sistema coleta e armazena eventos de bem-estar
-- Modelo ML identifica padrões de stress com 70%+ acurácia
-- Usuários podem criar e entrar em ambientes colaborativos
+- Sistema coleta e armazena indicadores de saúde mental
+- Modelo ML identifica padrões de risco com 70%+ acurácia
+- Alertas automáticos para projetos sem atividade
 
 ---
 
-### Sprint 3 (Semana 3): Agentes IA e Analytics
-**Objetivo**: Implementar orquestração de agentes inteligentes com CrewAI
+### Sprint 3 (Semana 3): Agentes Educacionais e Avaliação
+**Objetivo**: Implementar agentes para educação e avaliação
 
 #### Tarefas
-- [ ] Implementar Agents Orchestrator (CrewAI)
-  - [ ] Agente de Produtividade (task optimization)
-  - [ ] Agente de Bem-Estar (health monitoring)
-  - [ ] Agente de Aprendizado (skill recommendations)
-  - [ ] Sistema de comunicação entre agentes
-  - [ ] Dashboard de atividades dos agentes
-- [ ] Implementar Analytics Service
-  - [ ] Pipeline de processamento de dados
-  - [ ] Modelos ML para previsões
-  - [ ] Análise de tendências e padrões
-  - [ ] Scripts R para análises estatísticas
+- [ ] Implementar Grading Agent
+  - [ ] Geração automática de rubricas
+  - [ ] Correção automatizada de trabalhos
+  - [ ] Feedback personalizado
+  - [ ] Interface de aprovação
+- [ ] Implementar Code Review Agent
+  - [ ] Integração GitHub API
+  - [ ] Análise estática de código
+  - [ ] Reviews educacionais automatizados
+  - [ ] Detecção de plágio
+- [ ] Implementar Gamified Exams
+  - [ ] Engine de questões interativas
+  - [ ] Acessibilidade para dislexia
+  - [ ] Sistema de gamificação
 - [ ] Integrar agentes no Dashboard
   - [ ] Visualização de ações dos agentes
   - [ ] Chat interface com agentes
   - [ ] Recomendações e insights
 
 **Entregáveis**:
-- Orquestrador CrewAI com 3+ agentes funcionais
-- Analytics Service processando dados em tempo real
-- Dashboard mostrando ações e insights dos agentes
+- Grading Agent com correção automatizada
+- Code Review Agent integrado ao GitHub
+- Gamified Exams com acessibilidade
+- Dashboard mostrando ações dos agentes educacionais
 
 **Critérios de Aceitação**:
-- Agentes colaboram entre si para resolver tarefas
-- Sistema gera recomendações personalizadas
-- Dashboard visualiza atividade dos agentes em tempo real
+- Sistema corrige trabalhos automaticamente com feedback
+- Code reviews aparecem automaticamente no GitHub
+- Exames gamificados suportam alunos com dislexia
 
 ---
 
-### Sprint 4 (Semana 4): Recrutamento Inclusivo e Sustentabilidade
-**Objetivo**: Implementar soluções de RH e impacto ambiental
+### Sprint 4 (Semana 4): Detecção e Ética em IA
+**Objetivo**: Implementar detecção de plágio e uso ético de IA
 
 #### Tarefas
-- [ ] Implementar Recruitment Service
-  - [ ] IA para triagem de currículos (com explicabilidade)
-  - [ ] Análise de diversidade e inclusão
-  - [ ] Sistema de matching candidato-vaga
-  - [ ] Detecção de viés em processos seletivos
-  - [ ] Interface para recrutadores
-- [ ] Implementar Green Work Service
-  - [ ] Cálculo de carbon footprint (remoto vs presencial)
-  - [ ] Recomendações de práticas sustentáveis
-  - [ ] Gamificação de comportamentos ecológicos
-  - [ ] Dashboard de impacto ambiental
-- [ ] Criar interfaces Flutter
-  - [ ] Portal de recrutamento
-  - [ ] Dashboard de sustentabilidade
+- [ ] Implementar Plagiarism Detection Agent
+  - [ ] Análise de código (AST + embeddings)
+  - [ ] Análise de texto (TF-IDF + semantic)
+  - [ ] Comparação intra-turma
+  - [ ] Relatórios de originalidade
+- [ ] Implementar AI Usage Detection Agent
+  - [ ] Detecção de texto gerado por LLMs
+  - [ ] Análise de código gerado por IA
+  - [ ] Padrões de uso adequado vs inadequado
+  - [ ] Verificação de compreensão
+- [ ] Implementar Approval Interface
+  - [ ] Dashboard unificado de aprovações
+  - [ ] Preview e edição de conteúdos
+  - [ ] Chat com agentes para ajustes
+  - [ ] Aprovação em massa
 
 **Entregáveis**:
-- Recruitment Service com IA explicável
-- Green Work Service com métricas ambientais
-- Interfaces completas no Flutter
+- Plagiarism Detection Agent com análise semântica
+- AI Usage Detection Agent funcional
+- Approval Interface para professores
 
 **Critérios de Aceitação**:
-- Sistema identifica e reduz viés em seleções
-- Cálculo de carbon footprint validado
-- Recomendações sustentáveis personalizadas
+- Sistema detecta plágio com 85%+ acurácia
+- Identifica uso inadequado de IA em trabalhos
+- Professores podem aprovar/editar tudo em uma interface
 
 ---
 
-### Sprint 5 (Semana 5): Dashboard, Gamificação e Integração
-**Objetivo**: Unificar sistema e adicionar gamificação
+### Sprint 5 (Semana 5): Geração e Revisão de Conteúdo
+**Objetivo**: Implementar geração e validação de conteúdo educacional
+
+#### Tarefas
+- [ ] Implementar Content Generator Agent
+  - [ ] Integração com APIs de geração (Veo3, NotebookLM)
+  - [ ] Pipeline de criação de vídeos/podcasts
+  - [ ] Geração de roteiros e slides
+- [ ] Implementar Content Reviewer Agent
+  - [ ] Revisão automática de conteúdos
+  - [ ] Fact-checking e validação
+  - [ ] Detecção de material desatualizado
+- [ ] Implementar Award Methodology Agent
+  - [ ] Criação de metodologias de premiação
+  - [ ] Avaliação competitiva transparente
+  - [ ] Rankings com justificativas
+
+**Entregáveis**:
+- Content Generator Agent produzindo materiais
+- Content Reviewer Agent validando conteúdos
+- Award Methodology Agent para competições
+
+**Critérios de Aceitação**:
+- Vídeos educacionais gerados automaticamente
+- Conteúdos revisados e validados
+- Rankings de premiação explicáveis
+
+---
+
+### Sprint 6 (Semana 6): Dashboard, Gamificação e Integração
+**Objetivo**: Unificar sistema e adicionar gamificação completa
 
 #### Tarefas
 - [ ] Implementar Dashboard Service
-  - [ ] Agregação de dados de todos os serviços
+  - [ ] Agregação de dados de todos os agentes
   - [ ] Visualizações interativas (charts, graphs)
   - [ ] Relatórios personalizados
   - [ ] Exportação de dados (PDF, CSV)
-- [ ] Adicionar sistema de gamificação
-  - [ ] Sistema de pontos e badges
+- [ ] Expandir sistema de gamificação
+  - [ ] Sistema de pontos e badges em todos os módulos
   - [ ] Desafios e missões
   - [ ] Leaderboards e competições
   - [ ] Recompensas e incentivos
-- [ ] Integração completa entre serviços
+- [ ] Integração completa entre agentes
+  - [ ] Comunicação CrewAI entre agentes
   - [ ] Testes de integração end-to-end
   - [ ] Otimização de performance
   - [ ] Tratamento de erros e fallbacks
 
 **Entregáveis**:
 - Dashboard unificado e responsivo
-- Sistema de gamificação funcional
+- Sistema de gamificação completo
 - Aplicação integrada e testada
 
 **Critérios de Aceitação**:
-- Dashboard agrega dados de todos os serviços
+- Dashboard agrega dados de todos os 13+ agentes
 - Sistema de gamificação engaja usuários
 - Aplicação suporta 100+ usuários simultâneos
 
 ---
 
-### Sprint 6 (Semana 6): Testes, Documentação e Entrega
+### Sprint 7 (Semana 7): Testes, Documentação e Entrega
 **Objetivo**: Finalizar, testar e preparar entrega GS
 
 #### Tarefas
 - [ ] Testes abrangentes
-  - [ ] Testes unitários (cobertura 70%+)
-  - [ ] Testes de integração
+  - [ ] Testes unitários (cobertura 70%+) para todos os agentes
+  - [ ] Testes de integração entre agentes
   - [ ] Testes de segurança (OWASP)
   - [ ] Testes de performance e carga
 - [ ] Documentação completa
   - [ ] Documentação técnica (APIs, arquitetura)
   - [ ] Guias de uso e tutoriais
   - [ ] Comentários em código
-  - [ ] Diagramas de arquitetura
+  - [ ] Diagramas de arquitetura atualizados
 - [ ] Preparar demonstração
   - [ ] Criar dados de demonstração realistas
-  - [ ] Preparar cenários de uso
+  - [ ] Preparar cenários de uso com todos os agentes
   - [ ] Roteiro de demonstração em vídeo
 - [ ] Preparar entregáveis GS
   - [ ] PDF com estrutura completa
@@ -226,32 +332,32 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 **Critérios de Aceitação**:
 - Todos os testes passando
 - Documentação completa e clara
-- Vídeo demonstra integração de disciplinas
+- Vídeo demonstra integração de todos os agentes
 - PDF atende todos os requisitos GS
 
 ---
 
-## 🏗️ Arquitetura Técnica
+## 🏗️ Arquitetura Técnica Atualizada
 
 ### Diagrama de Componentes
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Frontend Flutter                         │
-│  (Microfrontends: Auth, Wellbeing, Collab, Recruit, Green)  │
-└────────────────────┬────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                     Frontend Flutter                             │
+│  (Microfrontends: Auth, Dashboard, Wellbeing, Research,         │
+│   Grading, CodeReview, GamifiedExams, Plagiarism, AI-Usage,     │
+│   ContentGen, ContentReview, Awards, Approval)                  │
+└────────────────────┬─────────────────────────────────────────────┘
                      │ HTTPS/REST/WebSocket
-┌────────────────────┴────────────────────────────────────────┐
-│                    API Gateway                               │
-└────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┘
-     │      │      │      │      │      │      │      │
-     v      v      v      v      v      v      v      v
-   Auth  Wellb  Collab Recruit Green  Agents Analytics Dash
-  Service  Svc    Svc    Svc    Svc   Orchest   Svc    Svc
-     │      │      │      │      │      │       │      │
-     └──────┴──────┴──────┴──────┴──────┴───────┴──────┘
+┌────────────────────┴─────────────────────────────────────────────┐
+│                    API Gateway                                   │
+└────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬──────┬────┘
+     │      │      │      │      │      │      │      │      │
+   Auth  Mental Research Grading Code  Gamified Plag  AI-Usage Content
+  Service Health Mgmt   Agent Review  Exams  Detect   Detect   Gen
+     │      │      │      │      │      │      │      │      │
+     └──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┘
                            │
-                           v
           ┌────────────────────────────────┐
           │    Serverless Database         │
           │  (DynamoDB / Aurora / Firebase)│
@@ -262,26 +368,26 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 
 **Frontend**
 - Flutter 3.x (Dart)
-- State Management: Provider/Riverpod/Bloc
+- State Management: Riverpod
 - UI: Material Design 3
-- Charts: fl_chart / charts_flutter
+- Charts: fl_chart
 - Real-time: WebSocket / Firebase
 
 **Backend Services**
 - Python 3.11+ (FastAPI / Flask)
 - Serverless Framework / SAM / Cloud Functions
-- APIs RESTful + GraphQL (opcional)
+- APIs RESTful + GraphQL
 - Message Queue: AWS SQS / Google Pub/Sub
 
-**Agentes IA**
-- CrewAI para orquestração
+**Agentes IA (CrewAI)**
+- 13+ agentes especializados
 - LangChain para LLM integration
 - OpenAI GPT / Anthropic Claude / Open source LLMs
 - Vector DB: Pinecone / Chroma / FAISS
 
 **Machine Learning**
 - scikit-learn, TensorFlow, PyTorch
-- Modelos: Random Forest, LSTM, Transformers
+- Modelos: Random Forest, LSTM, BERT, CodeBERT
 - MLOps: MLflow / Weights & Biases
 
 **Analytics**
@@ -289,17 +395,11 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 - R: ggplot2, dplyr, tidyverse
 - Notebooks: Jupyter / Google Colab
 
-**Banco de Dados**
-- NoSQL: DynamoDB / Firestore
-- SQL: Aurora Serverless / Cloud SQL
-- Cache: Redis / Memcached
-- Storage: S3 / Cloud Storage
-
-**DevOps**
-- CI/CD: GitHub Actions
-- IaC: Terraform / CloudFormation / Pulumi
-- Monitoring: CloudWatch / Datadog / Prometheus
-- Logging: CloudWatch Logs / ELK Stack
+**Integrações Externas**
+- GitHub API (code reviews, webhooks)
+- Google APIs (Veo3, NotebookLM, Drive)
+- YouTube API (upload de vídeos)
+- Twilio (WhatsApp notifications)
 
 ---
 
@@ -308,20 +408,20 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 ### Requisitos de Segurança (Cybersecurity)
 
 - **Autenticação**: OAuth2 + JWT, MFA opcional
-- **Autorização**: RBAC (Role-Based Access Control)
+- **Autorização**: RBAC granular para professores/alunos
 - **Criptografia**: 
   - Dados em trânsito: TLS 1.3
   - Dados em repouso: AES-256
   - Dados sensíveis de saúde: encryption at field level
 - **Auditoria**: Logs de todas as ações críticas
 - **GDPR/LGPD**: 
-  - Consentimento explícito
+  - Consentimento explícito para monitoramento
   - Direito ao esquecimento
   - Portabilidade de dados
   - Anonimização quando possível
 - **Proteção contra**: 
-  - SQL Injection (usar ORMs e prepared statements)
-  - XSS (sanitização de inputs)
+  - SQL Injection (ORMs)
+  - XSS (sanitização)
   - CSRF (tokens)
   - DDoS (rate limiting)
 
@@ -329,7 +429,7 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 
 - OWASP Top 10 compliance
 - Vulnerability scanning (Snyk / Dependabot)
-- Penetration testing (antes da entrega)
+- Penetration testing
 - Security code review
 
 ---
@@ -340,9 +440,10 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 
 1. **Coleta**: 
    - Eventos de usuários (clicks, tempo, ações)
-   - Biometria simulada (stress, sono, atividade)
-   - Dados de recrutamento (anonimizados)
-   - Métricas ambientais (consumo energia, transporte)
+   - Dados educacionais (notas, participação, progresso)
+   - Indicadores de saúde mental (com consentimento)
+   - Métricas de IA (uso, detecção de plágio)
+   - Dados de gamificação (pontos, conquistas)
 
 2. **Armazenamento**:
    - Raw data: S3 / Cloud Storage
@@ -356,7 +457,7 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 
 4. **Análise**:
    - Descritiva: estatísticas básicas
-   - Preditiva: modelos ML
+   - Preditiva: modelos ML para bem-estar, performance
    - Prescritiva: agentes IA com recomendações
 
 5. **Visualização**:
@@ -368,11 +469,12 @@ Desenvolver POC funcional que demonstre como IA e tecnologia podem tornar o trab
 
 | Modelo | Uso | Algoritmo | Métricas |
 |--------|-----|-----------|----------|
-| Stress Detection | Bem-estar | Random Forest / LSTM | Accuracy, Precision, Recall |
-| Task Recommendation | Produtividade | Collaborative Filtering | RMSE, MAP@K |
-| Bias Detection | Recrutamento | Fairness-aware ML | Disparate Impact, Equal Opportunity |
-| Carbon Footprint | Sustentabilidade | Regression / Time Series | MAPE, R² |
-| Churn Prediction | Engajamento | Gradient Boosting | AUC-ROC, F1-Score |
+| Mental Health Detection | Bem-estar | Random Forest / LSTM | Accuracy, Precision, Recall |
+| Plagiarism Detection | Detecção de cópia | BERT + Cosine Similarity | F1-Score, Precision |
+| AI Usage Detection | Detecção de IA | Transformer Classifier | AUC-ROC, F1-Score |
+| Code Review Quality | Qualidade de código | CodeBERT | Accuracy |
+| Student Performance | Previsão de notas | Gradient Boosting | RMSE, R² |
+| Content Quality | Avaliação de conteúdo | BERT | Accuracy |
 
 ---
 
@@ -404,25 +506,25 @@ Veja [docs/discipline-mapping.md](discipline-mapping.md) para mapeamento complet
    - Objetivos
 
 3. Desenvolvimento (15-20 páginas)
-   - Arquitetura da solução
+   - Arquitetura dos 13+ agentes IA
    - Integração por disciplina (AICSS, Cyber, ML, etc)
    - Tecnologias utilizadas
-   - Diagramas e fluxos
+   - Diagramas e fluxos atualizados
    - Códigos principais comentados
    - Decisões de design
    - Desafios enfrentados
 
 4. Resultados Esperados (2-3 páginas)
-   - Funcionalidades implementadas
+   - Funcionalidades dos agentes implementadas
    - Demonstrações (screenshots, logs)
-   - Análises de dados
+   - Análises de dados de ML
    - Insights dos agentes IA
 
 5. Conclusões (2 páginas)
    - Aprendizados
-   - Impacto esperado
+   - Impacto na educação e trabalho
    - Trabalhos futuros
-   - Contribuição para o futuro do trabalho
+   - Contribuição para uso ético de IA
 
 6. Referências
    - Bibliográficas
@@ -438,11 +540,11 @@ Veja [docs/discipline-mapping.md](discipline-mapping.md) para mapeamento complet
 ```
 Estrutura sugerida:
 - 0:00-0:30: Introdução + "QUERO CONCORRER" + nome do grupo
-- 0:30-2:00: Explicação do problema e solução proposta
-- 2:00-4:00: Demonstração técnica (navegação no sistema)
-- 4:00-5:30: Integração disciplinas (mostrar cada aspecto)
-- 5:30-6:30: Agentes IA em ação (CrewAI demo)
-- 6:30-7:00: Conclusão e impacto esperado
+- 0:30-2:00: Explicação do problema e solução com 13+ agentes
+- 2:00-4:00: Demonstração técnica (dashboard, agentes em ação)
+- 4:00-5:30: Integração disciplinas (ML, Cyber, Cloud, etc)
+- 5:30-6:30: Agentes IA colaborando (CrewAI demo)
+- 6:30-7:00: Conclusão e impacto ético de IA
 ```
 
 ---
@@ -451,7 +553,7 @@ Estrutura sugerida:
 
 ### Requisitos Técnicos
 - [ ] MVP funcional demonstrável
-- [ ] IA aplicada em múltiplos contextos
+- [ ] 13+ agentes IA aplicados em contextos educacionais
 - [ ] Machine Learning com modelos treinados
 - [ ] Todas disciplinas integradas
 - [ ] Coleta e análise de dados funcionando
@@ -470,7 +572,7 @@ Estrutura sugerida:
 
 ### Qualidade e Diferenciação
 - [ ] Solução criativa e inovadora
-- [ ] Integração clara entre disciplinas
+- [ ] Integração clara entre 13+ agentes
 - [ ] Demonstração prática convincente
 - [ ] Documentação clara e completa
 - [ ] Apresentação visual organizada
@@ -498,8 +600,4 @@ Estrutura sugerida:
 
 ---
 
-**Dúvidas?** Consulte os roadmaps específicos de cada app em `src/apps/<app_name>/roadmap.md`
-
-**Problemas técnicos?** Veja `.github/copilot-instructions.md` para troubleshooting
-
-**Questões sobre entrega?** Consulte `docs/delivery-guidelines.md`
+**Dúvidas?** Consulte os roadmaps específicos de cada agente em `src/apps/<agent_name>/roadmap.md`
