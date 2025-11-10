@@ -112,6 +112,8 @@ flutter test
 
 📖 **[docs/developer-guide.md](docs/developer-guide.md)** - Guia completo para desenvolvedores
 
+🔄 **[docs/migration-guide.md](docs/migration-guide.md)** - Guia de migração para nova estrutura de monorepo
+
 📋 **[docs/roadmap-overview.md](docs/roadmap-overview.md)** - Roadmap detalhado de implementação
 
 📚 **[docs/discipline-mapping.md](docs/discipline-mapping.md)** - Mapeamento por disciplinas
