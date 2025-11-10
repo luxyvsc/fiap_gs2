@@ -1,7 +1,7 @@
 """User service for user management operations."""
 from typing import Optional
 
-from ..models.user import User, UserInDB, UserUpdate
+from ..models.user import User, UserUpdate
 from ..repositories.user_repository import user_repository
 
 

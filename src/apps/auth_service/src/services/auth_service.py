@@ -1,5 +1,4 @@
 """Authentication service for user registration and login."""
-from datetime import timedelta
 from typing import Optional
 
 from ..core.security import (create_access_token, create_refresh_token,
