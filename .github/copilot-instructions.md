@@ -1,6 +1,6 @@
-# Instruções para Colaboradores - SymbioWork
+# Instruções para Colaboradores - FIAP AI-Enhanced Learning Platform
 
-## 👋 Bem-vindo ao Projeto SymbioWork!
+## 👋 Bem-vindo ao Projeto!
 
 Este documento contém informações essenciais para desenvolvedores, agentes de IA e colaboradores que trabalharão neste projeto.
 
@@ -8,17 +8,17 @@ Este documento contém informações essenciais para desenvolvedores, agentes de
 
 ## 🎯 Visão Geral do Projeto
 
-**SymbioWork** é um ecossistema de assistentes de IA e ambientes de trabalho adaptativos desenvolvido para a Global Solution 2025.2 da FIAP.
+**FIAP AI-Enhanced Learning Platform** é uma plataforma que utiliza agentes de IA e gamificação para transformar a experiência educacional na FIAP, desenvolvida para a Global Solution 2025.2.
 
 ### Objetivo
-Demonstrar como a tecnologia (especialmente IA) pode tornar o trabalho mais humano, inclusivo e sustentável no futuro.
+Demonstrar como a tecnologia (especialmente IA e gamificação) pode tornar o trabalho educacional mais eficiente, inclusivo e humano.
 
 ### Conceito Principal
-- **Agentes IA como Companheiros**: Não substituem humanos, mas os empoderam
-- **Ambientes Adaptativos**: Espaços de trabalho que se ajustam às necessidades individuais
-- **Bem-Estar em Primeiro Lugar**: Monitoramento proativo de saúde mental e física
-- **Inclusão e Diversidade**: IA explicável para recrutamento justo
-- **Sustentabilidade**: Medição e otimização de impacto ambiental
+- **Agentes IA como Assistentes de Professores**: Automatizam tarefas repetitivas mas mantêm controle humano
+- **Gamificação para Engajamento**: Aprendizado mais motivador e inclusivo
+- **Transparência e Explicabilidade**: Todas decisões de IA são justificadas e aprovadas por humanos
+- **Inclusão**: Suporte especial para dislexia e outras necessidades
+- **Qualidade de Conteúdo**: Revisão contínua automática de materiais educacionais
 
 ---
 
@@ -27,53 +27,47 @@ Demonstrar como a tecnologia (especialmente IA) pode tornar o trabalho mais huma
 ### Stack Tecnológico
 
 #### Frontend
-- **Framework**: Flutter 3.x (Dart)
-- **Arquitetura**: Microfrontends/Modular
-- **State Management**: Provider / Riverpod / Bloc (a definir)
-- **UI**: Material Design 3
-- **Charts**: fl_chart ou charts_flutter
-- **Real-time**: WebSocket ou Firebase Real-time
+- **Framework**: Flutter 3.x (Dart) - Web e Mobile
+- **State Management**: Riverpod / Bloc
+- **UI**: Material Design 3 com tema claro/escuro
+- **Charts**: fl_chart
+- **Real-time**: WebSocket para chat com agentes
 
 #### Backend
 - **Linguagem**: Python 3.11+
-- **Framework**: FastAPI (recomendado) ou Flask
+- **Framework**: FastAPI
 - **Arquitetura**: Microservices Serverless
-- **Deployment**: AWS Lambda / Google Cloud Functions / Azure Functions
-- **API Style**: REST + GraphQL opcional
+- **Deployment**: AWS Lambda / Google Cloud Functions
+- **API Style**: REST
 
 #### Agentes de IA
 - **Orquestração**: CrewAI
-- **LLM Integration**: LangChain
-- **Modelos**: OpenAI GPT-4, Anthropic Claude, ou LLMs open-source (Llama, Mistral)
-- **Vector DB**: Pinecone, Chroma ou FAISS para embeddings
+- **LLM Integration**: LangChain, OpenAI GPT-4 / Anthropic Claude
+- **Integrações**: GitHub API, Veo3, NotebookLM, Grok, ElevenLabs
 
 #### Machine Learning
-- **Frameworks**: scikit-learn, TensorFlow, PyTorch
-- **Modelos**: Random Forest, LSTM, Transformers (BERT/DistilBERT)
-- **MLOps**: MLflow para tracking, Weights & Biases opcional
+- **Frameworks**: scikit-learn, TensorFlow (para modelos específicos)
+- **NLP**: Transformers (BERT para detecção de plágio, sentiment analysis)
+- **Code Analysis**: AST parsing, CodeBERT embeddings
 
 #### Análise de Dados
-- **Python**: pandas, numpy, matplotlib, seaborn
-- **R**: ggplot2, dplyr, tidyverse para análises estatísticas
-- **Notebooks**: Jupyter, Google Colab
+- **Python**: pandas, numpy
+- **R**: ggplot2, tidyverse para análises estatísticas de desempenho
 
 #### Infraestrutura Cloud (Serverless)
-- **Providers**: AWS (primário), GCP ou Azure (alternativas)
+- **Providers**: AWS (primário)
 - **Compute**: Lambda Functions
 - **API Gateway**: AWS API Gateway
 - **Database**: 
-  - NoSQL: DynamoDB (eventos, logs)
-  - SQL: Aurora Serverless (dados relacionais)
-  - Cache: Redis / ElastiCache
-- **Storage**: S3 para arquivos e datasets
+  - NoSQL: DynamoDB (eventos, logs, documentos)
+  - SQL: Aurora Serverless (dados relacionais, históricos)
+- **Storage**: S3 para vídeos, PDFs, repos clonados
 - **Messaging**: SQS (filas), SNS (notificações)
-- **Monitoring**: CloudWatch, Datadog (opcional)
 
 #### DevOps
 - **CI/CD**: GitHub Actions
 - **IaC**: Terraform ou Serverless Framework
 - **Version Control**: Git + GitHub
-- **Containerization**: Docker (para desenvolvimento local)
 - **Testing**: pytest (Python), flutter test (Dart)
 
 ---
@@ -87,83 +81,29 @@ fiap_gs2/
 │   └── copilot-instructions.md # Este arquivo
 │
 ├── assets/                     # Imagens, prints, recursos visuais
-│   ├── images/
-│   ├── screenshots/
-│   └── diagrams/
 │
 ├── docs/                       # Documentação do projeto
 │   ├── roadmap-overview.md
 │   ├── discipline-mapping.md
-│   ├── delivery-guidelines.md
-│   └── architecture.md         # A criar
+│   └── delivery-guidelines.md
 │
 ├── src/                        # Código-fonte
 │   ├── apps/                   # Microservices e apps
-│   │   ├── frontend_flutter/   # Frontend Flutter
-│   │   │   ├── lib/
-│   │   │   ├── test/
-│   │   │   ├── pubspec.yaml
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── auth_service/       # Autenticação JWT + OAuth2
-│   │   │   ├── src/
-│   │   │   ├── tests/
-│   │   │   ├── requirements.txt
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── wellbeing_service/  # Monitoramento bem-estar + ML
-│   │   │   ├── src/
-│   │   │   ├── models/         # Modelos ML
-│   │   │   ├── tests/
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── collaboration_service/  # Ambientes colaborativos
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── recruitment_service/    # RH inclusivo + IA explicável
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── green_work_service/     # Sustentabilidade laboral
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── agents_orchestrator/    # CrewAI - orquestração de agentes
-│   │   │   ├── agents/
-│   │   │   │   ├── productivity_agent.py
-│   │   │   │   ├── wellbeing_agent.py
-│   │   │   │   └── learning_agent.py
-│   │   │   └── roadmap.md
-│   │   │
-│   │   ├── analytics_service/      # Pipeline de dados + análises
-│   │   │   ├── ml/
-│   │   │   ├── r_scripts/
-│   │   │   └── roadmap.md
-│   │   │
-│   │   └── dashboard_service/      # Agregação + visualizações
-│   │       └── roadmap.md
+│   │   ├── frontend_flutter/          # Frontend Flutter
+│   │   ├── auth_service/              # Autenticação
+│   │   ├── code_review_agent/         # Code review GitHub
+│   │   ├── grading_agent/             # Correção automatizada
+│   │   ├── award_methodology_agent/   # Sistema de premiação
+│   │   ├── content_generator_agent/   # Geração de conteúdo
+│   │   ├── research_management/       # Gestão IC
+│   │   ├── gamified_exams/            # Provas gamificadas
+│   │   ├── content_reviewer_agent/    # Revisão de conteúdo
+│   │   └── approval_interface/        # Interface de aprovação
 │   │
 │   └── shared/                 # Código compartilhado (a criar)
-│       ├── utils/
-│       ├── models/
-│       └── config/
 │
-├── infrastructure/             # IaC - Terraform ou Serverless Framework
-│   ├── terraform/              # A criar
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   └── outputs.tf
-│   └── serverless.yml          # Ou Serverless Framework config
-│
-├── tests/                      # Testes de integração end-to-end
-│   └── integration/
-│
-├── scripts/                    # Scripts utilitários
-│   ├── setup.sh
-│   ├── deploy.sh
-│   └── seed_data.py
-│
-├── .gitignore
-├── README.md
-└── docker-compose.yml          # Para desenvolvimento local (opcional)
+├── infrastructure/             # IaC
+└── .gitignore
 ```
 
 ---
@@ -176,8 +116,7 @@ fiap_gs2/
 - Git
 - Python 3.11+
 - Flutter SDK 3.x
-- Node.js 18+ (para ferramentas auxiliares)
-- Docker (opcional, para dev local)
+- Docker (opcional)
 - AWS CLI / gcloud CLI / Azure CLI (dependendo do cloud provider escolhido)
 - Terraform ou Serverless Framework
 
