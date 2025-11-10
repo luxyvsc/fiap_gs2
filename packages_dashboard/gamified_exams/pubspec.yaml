@@ -1,0 +1,39 @@
+name: gamified_exams
+description: Gamified and inclusive exam system with accessibility features
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # UI Components
+  cupertino_icons: ^1.0.2
+  
+  # State Management
+  flutter_riverpod: ^2.4.0
+  
+  # Networking
+  dio: ^5.3.3
+  web_socket_channel: ^2.4.0
+  
+  # Storage
+  shared_preferences: ^2.2.2
+  flutter_secure_storage: ^9.0.0
+  
+  # Utils
+  intl: ^0.18.1
+  logger: ^2.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  flutter_lints: ^3.0.0
+  mockito: ^5.4.3
+  build_runner: ^2.4.6
+
+flutter:
+  uses-material-design: true
