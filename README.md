@@ -38,29 +38,31 @@ Responder ao desafio FIAP GS 2025.2: **"Como a tecnologia pode tornar o trabalho
 
 ```
 fiap_gs2/
+├── packages/            # Pacotes Python (microservices)
+│   ├── auth_service/              # Autenticação e autorização
+│   ├── code_review_agent/         # Agente de code review (GitHub API)
+│   ├── grading_agent/             # Agente de correção automatizada
+│   ├── award_methodology_agent/   # Agente de metodologia de premiação
+│   ├── content_generator_agent/   # Gerador de conteúdo educacional
+│   ├── research_management/       # Gestão de iniciação científica
+│   ├── content_reviewer_agent/    # Agente de revisão de conteúdo
+│   ├── mental_health_agent/       # Agente de detecção de saúde mental
+│   ├── plagiarism_detection_agent/# Agente de detecção de plágio
+│   └── ai_usage_detection_agent/  # Agente de detecção de uso de IA
+├── packages_dashboard/  # Pacotes Flutter (interfaces)
+│   ├── frontend_flutter/          # Frontend Flutter (Web/Mobile)
+│   ├── approval_interface/        # Interface de aprovação/edição
+│   └── gamified_exams/            # Sistema de provas gamificadas
 ├── assets/              # Prints, anexos, imagens e recursos visuais
 ├── docs/                # Documentação completa do projeto
 │   ├── roadmap-overview.md
 │   ├── discipline-mapping.md
 │   └── delivery-guidelines.md
-├── src/                 # Código-fonte dividido por apps
-│   └── apps/
-│       ├── frontend_flutter/          # Frontend Flutter (Web/Mobile)
-│       ├── auth_service/              # Autenticação e autorização
-│       ├── code_review_agent/         # Agente de code review (GitHub API)
-│       ├── grading_agent/             # Agente de correção automatizada
-│       ├── award_methodology_agent/   # Agente de metodologia de premiação
-│       ├── content_generator_agent/   # Gerador de conteúdo educacional
-│       ├── research_management/       # Gestão de iniciação científica
-│       ├── gamified_exams/            # Sistema de provas gamificadas
-│       ├── content_reviewer_agent/    # Agente de revisão de conteúdo
-│       ├── mental_health_agent/       # Agente de detecção de saúde mental
-│       ├── plagiarism_detection_agent/# Agente de detecção de plágio
-│       ├── ai_usage_detection_agent/  # Agente de detecção de uso de IA
-│       └── approval_interface/        # Interface de aprovação/edição
 └── .github/
     └── copilot-instructions.md      # Instruções para colaboradores
 ```
+
+> **Nota**: Este projeto utiliza arquitetura de monorepo com pacotes independentes. Cada pacote em `packages/` e `packages_dashboard/` pode ser instalado e desenvolvido separadamente.
 
 ## 🎓 Integração Disciplinar FIAP
 
@@ -78,9 +80,37 @@ Este projeto integra todas as disciplinas do curso:
 
 ## 🚀 Como Começar
 
-Para detalhes completos sobre configuração, desenvolvimento e contribuição, consulte:
+### Desenvolvimento Local
 
-📖 **[docs/developer-guide.md](docs/copilot-instructions.md)** - Guia completo para desenvolvedores
+**Pacotes Python:**
+```bash
+# Instalar um pacote em modo editável
+cd packages/auth_service
+pip install -e ".[dev]"
+
+# Executar testes
+pytest
+
+# Formatar código
+black . && isort .
+```
+
+**Pacotes Flutter:**
+```bash
+# Instalar dependências
+cd packages_dashboard/frontend_flutter
+flutter pub get
+
+# Executar aplicação
+flutter run -d chrome
+
+# Executar testes
+flutter test
+```
+
+### Documentação
+
+📖 **[docs/developer-guide.md](docs/developer-guide.md)** - Guia completo para desenvolvedores
 
 📋 **[docs/roadmap-overview.md](docs/roadmap-overview.md)** - Roadmap detalhado de implementação
 
@@ -88,23 +118,28 @@ Para detalhes completos sobre configuração, desenvolvimento e contribuição, 
 
 📦 **[docs/delivery-guidelines.md](docs/delivery-guidelines.md)** - Guia de entrega GS
 
-## 📋 Roadmaps por App
+## 📋 Pacotes do Projeto
 
-Cada aplicação possui seu próprio roadmap detalhado em `src/apps/<app_name>/roadmap.md`:
+### Pacotes Python (`packages/`)
 
-- [Frontend Flutter](src/apps/frontend_flutter/roadmap.md) - Interface com tema claro/escuro
-- [Auth Service](src/apps/auth_service/roadmap.md) - Autenticação e autorização
-- [Code Review Agent](src/apps/code_review_agent/roadmap.md) - Análise inteligente via GitHub
-- [Grading Agent](src/apps/grading_agent/roadmap.md) - Correção automatizada
-- [Award Methodology Agent](src/apps/award_methodology_agent/roadmap.md) - Sistema de premiação
-- [Content Generator Agent](src/apps/content_generator_agent/roadmap.md) - Geração com Veo3/Grok
-- [Research Management](src/apps/research_management/roadmap.md) - Iniciação científica
-- [Gamified Exams](src/apps/gamified_exams/roadmap.md) - Provas inclusivas
-- [Content Reviewer Agent](src/apps/content_reviewer_agent/roadmap.md) - Revisão contínua
-- [Mental Health Agent](src/apps/mental_health_agent/roadmap.md) - Detecção de saúde mental
-- [Plagiarism Detection Agent](src/apps/plagiarism_detection_agent/roadmap.md) - Detecção de plágio
-- [AI Usage Detection Agent](src/apps/ai_usage_detection_agent/roadmap.md) - Detecção de uso de IA
-- [Approval Interface](src/apps/approval_interface/roadmap.md) - Interface de aprovação
+Cada pacote possui seu próprio roadmap e pode ser instalado independentemente:
+
+- [Auth Service](packages/auth_service/roadmap.md) - Autenticação e autorização
+- [Code Review Agent](packages/code_review_agent/roadmap.md) - Análise inteligente via GitHub
+- [Grading Agent](packages/grading_agent/roadmap.md) - Correção automatizada
+- [Award Methodology Agent](packages/award_methodology_agent/roadmap.md) - Sistema de premiação
+- [Content Generator Agent](packages/content_generator_agent/roadmap.md) - Geração com Veo3/Grok
+- [Research Management](packages/research_management/roadmap.md) - Iniciação científica
+- [Content Reviewer Agent](packages/content_reviewer_agent/roadmap.md) - Revisão contínua
+- [Mental Health Agent](packages/mental_health_agent/roadmap.md) - Detecção de saúde mental
+- [Plagiarism Detection Agent](packages/plagiarism_detection_agent/roadmap.md) - Detecção de plágio
+- [AI Usage Detection Agent](packages/ai_usage_detection_agent/roadmap.md) - Detecção de uso de IA
+
+### Pacotes Flutter (`packages_dashboard/`)
+
+- [Frontend Flutter](packages_dashboard/frontend_flutter/roadmap.md) - Interface com tema claro/escuro
+- [Approval Interface](packages_dashboard/approval_interface/roadmap.md) - Interface de aprovação
+- [Gamified Exams](packages_dashboard/gamified_exams/roadmap.md) - Provas inclusivas
 
 ## 🎬 Entrega GS 2025.2
 

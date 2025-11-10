@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 import pytest
 from jose import JWTError, jwt
 
-from src.core.config import settings
-from src.core.security import (create_access_token, create_refresh_token,
+from auth_service.core.config import settings
+from auth_service.core.security import (create_access_token, create_refresh_token,
                                decode_access_token, decode_refresh_token,
                                hash_password, verify_password)
 
