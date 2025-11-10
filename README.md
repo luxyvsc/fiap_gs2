@@ -17,6 +17,9 @@ Responder ao desafio FIAP GS 2025.2: **"Como a tecnologia pode tornar o trabalho
 - **Gestão de Iniciação Científica**: Sistema integrado para coordenadores administrarem grupos sem exclusões
 - **Provas Gamificadas Inclusivas**: Avaliações adaptativas e acessíveis para estudantes com dislexia
 - **Revisão Contínua de Conteúdo**: Agentes de IA checam fontes, corrigem erros e mantêm materiais atualizados
+- **Detecção de Saúde Mental**: Monitoramento de bem-estar de alunos, professores e colaboradores com alertas precoces
+- **Detecção de Plágio**: Identificação de cópias em código e texto com análise semântica e estrutural
+- **Detecção de Uso de IA**: Identificação de uso excessivo de ChatGPT/Copilot promovendo aprendizado genuíno
 - **Interface de Aprovação/Edição**: Controle humano sobre todas as ações dos agentes de IA
 - **Frontend Moderno**: Tema claro/escuro e experiência de usuário otimizada
 
@@ -51,6 +54,9 @@ fiap_gs2/
 │       ├── research_management/       # Gestão de iniciação científica
 │       ├── gamified_exams/            # Sistema de provas gamificadas
 │       ├── content_reviewer_agent/    # Agente de revisão de conteúdo
+│       ├── mental_health_agent/       # Agente de detecção de saúde mental
+│       ├── plagiarism_detection_agent/# Agente de detecção de plágio
+│       ├── ai_usage_detection_agent/  # Agente de detecção de uso de IA
 │       └── approval_interface/        # Interface de aprovação/edição
 └── .github/
     └── copilot-instructions.md      # Instruções para colaboradores
@@ -95,6 +101,9 @@ Cada aplicação possui seu próprio roadmap detalhado em `src/apps/<app_name>/r
 - [Research Management](src/apps/research_management/roadmap.md) - Iniciação científica
 - [Gamified Exams](src/apps/gamified_exams/roadmap.md) - Provas inclusivas
 - [Content Reviewer Agent](src/apps/content_reviewer_agent/roadmap.md) - Revisão contínua
+- [Mental Health Agent](src/apps/mental_health_agent/roadmap.md) - Detecção de saúde mental
+- [Plagiarism Detection Agent](src/apps/plagiarism_detection_agent/roadmap.md) - Detecção de plágio
+- [AI Usage Detection Agent](src/apps/ai_usage_detection_agent/roadmap.md) - Detecção de uso de IA
 - [Approval Interface](src/apps/approval_interface/roadmap.md) - Interface de aprovação
 
 ## 🎬 Entrega GS 2025.2

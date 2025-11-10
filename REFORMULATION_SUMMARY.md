@@ -94,7 +94,7 @@
 
 ---
 
-## 📦 Serviços Criados (9 Apps)
+## 📦 Serviços Criados (12 Apps)
 
 | App | Descrição | Status |
 |-----|-----------|--------|
@@ -107,9 +107,12 @@
 | `research_management` | Gestão de IC | Roadmap ✅ |
 | `gamified_exams` | Provas gamificadas inclusivas | Roadmap ✅ |
 | `content_reviewer_agent` | Revisão de conteúdo | Roadmap ✅ |
+| `mental_health_agent` | Detecção de saúde mental | Roadmap ✅ |
+| `plagiarism_detection_agent` | Detecção de plágio | Roadmap ✅ |
+| `ai_usage_detection_agent` | Detecção de uso de IA | Roadmap ✅ |
 | `approval_interface` | Interface de aprovação | Roadmap ✅ |
 
-**Total**: 9 apps com roadmaps completos
+**Total**: 12 apps com roadmaps completos
 
 ---
 
@@ -132,12 +135,12 @@
 - Foco: bem-estar corporativo, sustentabilidade
 
 ### Depois
-- 9 serviços (tema FIAP AI-Enhanced)
+- 12 serviços (tema FIAP AI-Enhanced)
 - Foco: educação, agentes IA, gamificação
 - **Atende 100%** os requisitos solicitados
 
 ### Documentação
-- **8 novos roadmaps**: ~60KB de documentação técnica detalhada
+- **11 novos roadmaps**: ~95KB de documentação técnica detalhada
 - Cada roadmap inclui:
   - Objetivos e funcionalidades
   - Tarefas de implementação (fases)
@@ -193,6 +196,28 @@
   - `approval_interface` implementado
   - Dashboard unificado
   - Chat com agentes
+
+### Novos Agentes Adicionados
+
+- [x] **10. Agente de detecção de saúde mental**
+  - `mental_health_agent` implementado
+  - Monitora bem-estar de alunos, professores, colaboradores
+  - Alertas precoces e recomendações de suporte
+  - LGPD compliant, consentimento obrigatório
+
+- [x] **11. Agente de detecção de plágio**
+  - `plagiarism_detection_agent` implementado
+  - Análise de código (AST + semântica)
+  - Análise de texto (TF-IDF + BERT)
+  - Busca externa (GitHub, Stack Overflow)
+  - Comparação intra-turma
+
+- [x] **12. Agente de detecção de uso de IA**
+  - `ai_usage_detection_agent` implementado
+  - Detecta texto gerado por LLMs (GPT, Claude)
+  - Detecta código gerado por Copilot
+  - Promove uso ético de IA
+  - Sistema de verificação de compreensão
 
 ---
 
