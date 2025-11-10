@@ -5,8 +5,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from src.main import app
-from src.models.user import User, UserInDB
+from auth_service.main import app
+from auth_service.models.user import User, UserInDB
 
 client = TestClient(app)
 
@@ -14,7 +14,7 @@ client = TestClient(app)
 class TestAuthRoutes:
     """Test authentication endpoints."""
 
-    @patch("src.services.auth_service.auth_service.register_user")
+    @patch("auth_service.services.auth_service.auth_service.register_user")
     def test_register_success(self, mock_register):
         """Test successful user registration."""
         # Mock the register_user method
@@ -44,7 +44,7 @@ class TestAuthRoutes:
         assert "password" not in data
         assert "user_id" in data
 
-    @patch("src.services.auth_service.auth_service.register_user")
+    @patch("auth_service.services.auth_service.auth_service.register_user")
     def test_register_duplicate_email(self, mock_register):
         """Test registration with duplicate email."""
         mock_register.side_effect = ValueError("Email already registered")
@@ -87,10 +87,10 @@ class TestAuthRoutes:
 
         assert response.status_code == 422  # Validation error
 
-    @patch("src.services.auth_service.auth_service.login")
+    @patch("auth_service.services.auth_service.auth_service.login")
     def test_login_success(self, mock_login):
         """Test successful login."""
-        from src.models.token import Token
+        from auth_service.models.token import Token
 
         mock_login.return_value = Token(
             access_token="test-access-token",
@@ -109,7 +109,7 @@ class TestAuthRoutes:
         assert "refresh_token" in data
         assert data["token_type"] == "bearer"
 
-    @patch("src.services.auth_service.auth_service.login")
+    @patch("auth_service.services.auth_service.auth_service.login")
     def test_login_invalid_credentials(self, mock_login):
         """Test login with invalid credentials."""
         mock_login.return_value = None
@@ -122,10 +122,10 @@ class TestAuthRoutes:
         assert response.status_code == 401
         assert "incorrect" in response.json()["detail"].lower()
 
-    @patch("src.services.auth_service.auth_service.refresh_access_token")
+    @patch("auth_service.services.auth_service.auth_service.refresh_access_token")
     def test_refresh_token_success(self, mock_refresh):
         """Test successful token refresh."""
-        from src.models.token import Token
+        from auth_service.models.token import Token
 
         mock_refresh.return_value = Token(
             access_token="new-access-token",
@@ -142,7 +142,7 @@ class TestAuthRoutes:
         assert "access_token" in data
         assert "refresh_token" in data
 
-    @patch("src.services.auth_service.auth_service.refresh_access_token")
+    @patch("auth_service.services.auth_service.auth_service.refresh_access_token")
     def test_refresh_token_invalid(self, mock_refresh):
         """Test token refresh with invalid token."""
         mock_refresh.return_value = None

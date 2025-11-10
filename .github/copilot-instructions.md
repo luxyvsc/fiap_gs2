@@ -2,9 +2,9 @@
 
 ## Repository Overview
 
-**Purpose**: FIAP Global Solution 2025.2 POC demonstrating how AI and gamification can make educational work more human, inclusive, and sustainable. This is a **planning/architecture repository** currently containing roadmaps and documentation for a serverless AI-enhanced learning platform.
+**Purpose**: FIAP Global Solution 2025.2 POC demonstrating how AI and gamification can make educational work more human, inclusive, and sustainable. This is a **monorepo** containing independent packages for a serverless AI-enhanced learning platform.
 
-**Current State**: Documentation and roadmap phase - no implementation code exists yet. All 13 microservice apps have detailed roadmaps in `src/apps/*/roadmap.md` but contain no actual code files.
+**Current State**: Monorepo with package-based architecture. Python packages in `packages/` and Flutter packages in `packages_dashboard/`. Most packages contain roadmaps and minimal code, with `auth_service` having full implementation.
 
 **Tech Stack**:
 - Backend: Python 3.11+ with FastAPI, serverless (AWS Lambda/GCP Functions)
@@ -14,92 +14,107 @@
 - Analytics: R with tidyverse, ggplot2
 - Cloud: AWS (primary) - DynamoDB, Aurora Serverless, S3, Lambda, API Gateway
 - CI/CD: GitHub Actions (to be implemented)
+- Package Management: pyproject.toml (Python), pubspec.yaml (Flutter)
 
-**Repository Size**: ~47 files, 324KB total, primarily markdown documentation
+**Repository Size**: Monorepo with 10 Python packages + 3 Flutter packages
 
 ## Critical Information for Agents
 
 ### Repository Structure
 ```
 fiap_gs2/
-├── .github/               # GitHub workflows (empty - to be created)
-├── assets/                # Screenshots, images (8KB)
-├── docs/                  # Project documentation (100KB)
-│   ├── developer-guide.md      # Comprehensive dev guide
-│   ├── roadmap-overview.md     # Project roadmap
-│   ├── discipline-mapping.md   # FIAP course integration
-│   └── delivery-guidelines.md  # GS 2025.2 submission rules
-├── src/apps/              # 13 microservice directories (216KB)
-│   ├── auth_service/           # JWT, OAuth2, RBAC
-│   ├── frontend_flutter/       # Flutter web/mobile UI
-│   ├── code_review_agent/      # GitHub API integration
-│   ├── grading_agent/          # Automated grading with AI
-│   ├── award_methodology_agent/# Transparent prize system
-│   ├── content_generator_agent/# Veo3, NotebookLM, Grok
-│   ├── research_management/    # Academic research mgmt
-│   ├── gamified_exams/         # Inclusive adaptive tests
-│   ├── content_reviewer_agent/ # Content quality checks
-│   ├── mental_health_agent/    # Wellbeing monitoring
+├── .github/                      # GitHub workflows
+│   └── copilot-instructions.md
+├── assets/                       # Screenshots, images
+├── docs/                         # Project documentation
+│   ├── developer-guide.md
+│   ├── roadmap-overview.md
+│   ├── discipline-mapping.md
+│   └── delivery-guidelines.md
+├── packages/                     # Python packages (microservices)
+│   ├── auth_service/
+│   │   ├── src/
+│   │   │   └── auth_service/    # Installable package
+│   │   ├── tests/
+│   │   ├── pyproject.toml       # Package metadata
+│   │   ├── README.md
+│   │   └── roadmap.md
+│   ├── code_review_agent/
+│   ├── grading_agent/
+│   ├── award_methodology_agent/
+│   ├── content_generator_agent/
+│   ├── research_management/
+│   ├── content_reviewer_agent/
+│   ├── mental_health_agent/
 │   ├── plagiarism_detection_agent/
-│   ├── ai_usage_detection_agent/
-│   └── approval_interface/     # Human-in-the-loop UI
+│   └── ai_usage_detection_agent/
+├── packages_dashboard/           # Flutter packages (interfaces)
+│   ├── frontend_flutter/
+│   │   ├── lib/
+│   │   ├── test/
+│   │   ├── pubspec.yaml         # Package metadata
+│   │   ├── README.md
+│   │   └── roadmap.md
+│   ├── approval_interface/
+│   └── gamified_exams/
 └── .gitignore
 ```
 
-**Each app directory currently contains only**: `roadmap.md` (15-17KB detailed implementation plan)
+**Package Structure**: Each package is independently installable with its own dependencies, tests, and documentation.
 
 ### Starting Implementation - Critical First Steps
 
 **Before writing any code, always**:
-1. Read the specific app's `src/apps/<app_name>/roadmap.md` - these are comprehensive implementation guides
+1. Read the specific package's `packages/<package_name>/roadmap.md` or `packages_dashboard/<package_name>/roadmap.md`
 2. Review `docs/developer-guide.md` for coding standards, stack details, and patterns
 3. Check `docs/discipline-mapping.md` to understand which FIAP course requirements apply
 
-**When creating a new microservice**:
-1. Follow the structure defined in the app's roadmap.md exactly
-2. Standard Python service structure:
+**When creating a new Python package**:
+1. Follow the structure defined in the package's roadmap.md exactly
+2. Standard Python package structure:
    ```
-   app_name/
+   packages/package_name/
    ├── src/
-   │   ├── main.py              # FastAPI app or Lambda handler
-   │   ├── api/                 # Routes and endpoints
-   │   ├── models/              # Pydantic models
-   │   ├── services/            # Business logic
-   │   └── repositories/        # Data access
+   │   └── package_name/        # Installable package
+   │       ├── __init__.py
+   │       ├── main.py          # FastAPI app or Lambda handler
+   │       ├── api/             # Routes and endpoints
+   │       ├── models/          # Pydantic models
+   │       ├── services/        # Business logic
+   │       └── repositories/    # Data access
    ├── tests/
    │   ├── test_api.py
    │   └── test_services.py
-   ├── requirements.txt
-   ├── requirements-dev.txt
-   └── README.md
+   ├── pyproject.toml           # Package metadata and dependencies
+   ├── README.md
+   └── roadmap.md
    ```
 
-3. Standard Flutter app structure:
+3. Standard Flutter package structure:
    ```
-   frontend_flutter/
+   packages_dashboard/package_name/
    ├── lib/
-   │   ├── main.dart
-   │   ├── screens/
-   │   ├── widgets/
-   │   ├── services/
-   │   ├── models/
-   │   └── providers/
+   │   ├── src/                 # Private implementation
+   │   │   ├── screens/
+   │   │   ├── widgets/
+   │   │   ├── services/
+   │   │   └── models/
+   │   └── package_name.dart    # Public exports
    ├── test/
-   ├── pubspec.yaml
-   └── README.md
+   │   └── package_name_test.dart
+   ├── pubspec.yaml             # Package metadata and dependencies
+   ├── README.md
+   └── roadmap.md
    ```
 
 ### Build, Test, and Run Commands
 
-**Python Services** (once implemented):
+**Python Packages**:
 ```bash
-cd src/apps/<service_name>
+cd packages/<package_name>
 
 # Setup (always first)
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+pip install -e ".[dev]"         # Install in editable mode with dev dependencies
 
 # Testing (use pytest)
 pytest                              # All tests
@@ -112,12 +127,15 @@ isort .                  # Sort imports
 flake8 .                 # Lint (or pylint)
 
 # Local development
-uvicorn src.main:app --reload --port 8001
+cd src/<package_name>
+python -m <package_name>.main
+# or for FastAPI apps
+uvicorn <package_name>.main:app --reload --port 8001
 ```
 
-**Flutter Frontend** (once implemented):
+**Flutter Packages**:
 ```bash
-cd src/apps/frontend_flutter
+cd packages_dashboard/<package_name>
 
 # Setup (always first)
 flutter pub get
@@ -127,10 +145,23 @@ flutter test                    # Unit/widget tests
 flutter analyze                 # Static analysis
 flutter format .                # Format code
 
-# Running
+# Running (for apps)
 flutter devices                 # List available devices
 flutter run -d chrome           # Run on Chrome
 flutter run -d <device-id>      # Run on specific device
+```
+
+**Installing Multiple Packages**:
+```bash
+# Python - from project root
+pip install -e packages/auth_service
+pip install -e packages/code_review_agent
+# or install all at once with a script
+
+# Flutter - dependencies in pubspec.yaml
+dependencies:
+  package_name:
+    path: ../other_package
 ```
 
 **R Scripts** (for analytics):
@@ -289,32 +320,34 @@ jobs:
 
 ### Roadmap Navigation
 
-Each microservice has a detailed roadmap file (`src/apps/<app_name>/roadmap.md`) averaging 15KB. These contain:
+Each package has a detailed roadmap file (`packages/<package_name>/roadmap.md` or `packages_dashboard/<package_name>/roadmap.md`) averaging 15KB. These contain:
 - Architecture and tech stack
 - Complete folder structure
 - Phase-by-phase implementation tasks with checkboxes
 - Code examples and API specifications
 - Database schemas
 - Testing requirements
-- Integration points with other services
+- Integration points with other packages
 
-**Always reference the specific app's roadmap before implementing features.**
+**Always reference the specific package's roadmap before implementing features.**
 
 ### Common Pitfalls to Avoid
 
-1. **Don't create requirements.txt yet** - each roadmap specifies exact dependencies
+1. **Use pyproject.toml, not requirements.txt** - packages use modern pyproject.toml format
 2. **Don't assume database schema** - schemas are defined in roadmaps
 3. **Don't skip the approval interface** - human oversight is core to the project
 4. **Don't implement without reading roadmap** - detailed specs exist
-5. **Lambda cold starts**: Optimize package size, use provisioned concurrency for critical paths
-6. **Serverless limits**: AWS Lambda 15min timeout, 10GB memory max
-7. **Flutter web vs mobile**: Some features differ (file pickers, platform channels)
+5. **Install packages in editable mode** - use `pip install -e .` for development
+6. **Lambda cold starts**: Optimize package size, use provisioned concurrency for critical paths
+7. **Serverless limits**: AWS Lambda 15min timeout, 10GB memory max
+8. **Flutter web vs mobile**: Some features differ (file pickers, platform channels)
+9. **Package imports**: Use absolute imports from package name, not relative paths
 
 ### Files to Reference
 
 **Priority reading order**:
-1. `src/apps/<relevant_app>/roadmap.md` - Your implementation blueprint
-2. `docs/developer-guide.md` - Coding standards, stack details (38KB)
+1. `packages/<package_name>/roadmap.md` or `packages_dashboard/<package_name>/roadmap.md` - Implementation blueprint
+2. `docs/developer-guide.md` - Coding standards, stack details
 3. `docs/discipline-mapping.md` - FIAP course integration requirements
 4. `docs/roadmap-overview.md` - Overall project roadmap and MVP scope
 5. `.gitignore` - What not to commit (venv, .env, build artifacts, etc.)
@@ -323,8 +356,10 @@ Each microservice has a detailed roadmap file (`src/apps/<app_name>/roadmap.md`)
 
 **Key files in repo root**: `.gitignore`, `README.md` (project overview)
 **Documentation**: All in `docs/` directory
-**All roadmaps**: `src/apps/*/roadmap.md` (13 total)
-**No code yet**: Repository is in planning phase
+**Python packages**: `packages/*/` (10 packages)
+**Flutter packages**: `packages_dashboard/*/` (3 packages)
+**All roadmaps**: `packages/*/roadmap.md` and `packages_dashboard/*/roadmap.md`
+**Package structure**: Each package is independently installable
 **No CI/CD yet**: GitHub Actions workflows need to be created
 **No infrastructure yet**: Terraform/Serverless Framework configs need creation
 

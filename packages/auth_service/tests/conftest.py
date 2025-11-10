@@ -25,7 +25,7 @@ def sample_user_data():
 @pytest.fixture
 def sample_user_in_db():
     """Sample user as stored in database."""
-    from src.models.user import UserInDB
+    from auth_service.models.user import UserInDB
 
     return UserInDB(
         user_id="test-user-id-123",
@@ -43,7 +43,7 @@ def sample_user_in_db():
 @pytest.fixture
 def valid_access_token():
     """Generate a valid access token for testing."""
-    from src.core.security import create_access_token
+    from auth_service.core.security import create_access_token
 
     return create_access_token(data={"sub": "test-user-id-123", "role": "user"})
 
@@ -51,7 +51,7 @@ def valid_access_token():
 @pytest.fixture
 def valid_refresh_token():
     """Generate a valid refresh token for testing."""
-    from src.core.security import create_refresh_token
+    from auth_service.core.security import create_refresh_token
 
     return create_refresh_token("test-user-id-123")
 
@@ -59,6 +59,6 @@ def valid_refresh_token():
 @pytest.fixture
 def admin_access_token():
     """Generate an admin access token for testing."""
-    from src.core.security import create_access_token
+    from auth_service.core.security import create_access_token
 
     return create_access_token(data={"sub": "admin-user-id", "role": "admin"})

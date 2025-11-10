@@ -5,8 +5,8 @@ from unittest.mock import patch
 import pytest
 from fastapi.testclient import TestClient
 
-from src.main import app
-from src.models.user import User
+from auth_service.main import app
+from auth_service.models.user import User
 
 client = TestClient(app)
 
@@ -14,8 +14,8 @@ client = TestClient(app)
 class TestUserRoutes:
     """Test user management endpoints."""
 
-    @patch("src.core.dependencies.decode_access_token")
-    @patch("src.services.user_service.user_service.get_user")
+    @patch("auth_service.core.dependencies.decode_access_token")
+    @patch("auth_service.services.user_service.user_service.get_user")
     def test_get_current_user(self, mock_get_user, mock_decode):
         """Test getting current user profile."""
         mock_decode.return_value = {
@@ -49,8 +49,8 @@ class TestUserRoutes:
 
         assert response.status_code == 401
 
-    @patch("src.core.dependencies.decode_access_token")
-    @patch("src.services.user_service.user_service.update_user")
+    @patch("auth_service.core.dependencies.decode_access_token")
+    @patch("auth_service.services.user_service.user_service.update_user")
     def test_update_current_user(self, mock_update, mock_decode):
         """Test updating current user profile."""
         mock_decode.return_value = {
@@ -80,8 +80,8 @@ class TestUserRoutes:
         assert data["full_name"] == "Updated Name"
         assert data["email"] == "newemail@example.com"
 
-    @patch("src.core.dependencies.decode_access_token")
-    @patch("src.services.user_service.user_service.delete_user")
+    @patch("auth_service.core.dependencies.decode_access_token")
+    @patch("auth_service.services.user_service.user_service.delete_user")
     def test_delete_current_user(self, mock_delete, mock_decode):
         """Test deleting current user account."""
         mock_decode.return_value = {
@@ -98,8 +98,8 @@ class TestUserRoutes:
 
         assert response.status_code == 204
 
-    @patch("src.core.dependencies.decode_access_token")
-    @patch("src.services.user_service.user_service.get_user")
+    @patch("auth_service.core.dependencies.decode_access_token")
+    @patch("auth_service.services.user_service.user_service.get_user")
     def test_export_user_data(self, mock_get_user, mock_decode):
         """Test exporting user data (LGPD compliance)."""
         mock_decode.return_value = {
@@ -131,8 +131,8 @@ class TestUserRoutes:
         assert "full_name" in data
         assert "created_at" in data
 
-    @patch("src.core.dependencies.decode_access_token")
-    @patch("src.services.user_service.user_service.get_user")
+    @patch("auth_service.core.dependencies.decode_access_token")
+    @patch("auth_service.services.user_service.user_service.get_user")
     def test_admin_get_user_by_id(self, mock_get_user, mock_decode):
         """Test admin getting user by ID."""
         mock_decode.return_value = {
@@ -160,7 +160,7 @@ class TestUserRoutes:
         data = response.json()
         assert data["user_id"] == "other-user-id"
 
-    @patch("src.core.dependencies.decode_access_token")
+    @patch("auth_service.core.dependencies.decode_access_token")
     def test_non_admin_cannot_get_user_by_id(self, mock_decode):
         """Test that non-admin cannot get user by ID."""
         mock_decode.return_value = {"sub": "user-id", "role": "user", "type": "access"}
@@ -172,8 +172,8 @@ class TestUserRoutes:
 
         assert response.status_code == 403
 
-    @patch("src.core.dependencies.decode_access_token")
-    @patch("src.services.user_service.user_service.update_user_role")
+    @patch("auth_service.core.dependencies.decode_access_token")
+    @patch("auth_service.services.user_service.user_service.update_user_role")
     def test_admin_update_user_role(self, mock_update_role, mock_decode):
         """Test admin updating user role."""
         mock_decode.return_value = {

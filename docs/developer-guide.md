@@ -78,33 +78,48 @@ Demonstrar como a tecnologia (especialmente IA e gamificação) pode tornar o tr
 fiap_gs2/
 ├── .github/
 │   ├── workflows/              # GitHub Actions CI/CD
-│   └── copilot-instructions.md # Este arquivo
+│   └── copilot-instructions.md # Instruções para agentes
+│
+├── packages/                   # Pacotes Python (microservices)
+│   ├── auth_service/           
+│   │   ├── src/                # Código-fonte
+│   │   │   └── auth_service/   # Pacote instalável
+│   │   ├── tests/              # Testes unitários
+│   │   ├── pyproject.toml      # Metadados e dependências
+│   │   ├── README.md           # Documentação do pacote
+│   │   └── roadmap.md          # Roadmap de implementação
+│   ├── code_review_agent/
+│   ├── grading_agent/
+│   ├── award_methodology_agent/
+│   ├── content_generator_agent/
+│   ├── research_management/
+│   ├── content_reviewer_agent/
+│   ├── mental_health_agent/
+│   ├── plagiarism_detection_agent/
+│   └── ai_usage_detection_agent/
+│
+├── packages_dashboard/         # Pacotes Flutter (interfaces)
+│   ├── frontend_flutter/
+│   │   ├── lib/                # Código-fonte
+│   │   ├── test/               # Testes
+│   │   ├── pubspec.yaml        # Metadados e dependências
+│   │   ├── README.md           # Documentação do pacote
+│   │   └── roadmap.md          # Roadmap de implementação
+│   ├── approval_interface/
+│   └── gamified_exams/
 │
 ├── assets/                     # Imagens, prints, recursos visuais
 │
 ├── docs/                       # Documentação do projeto
 │   ├── roadmap-overview.md
 │   ├── discipline-mapping.md
-│   └── delivery-guidelines.md
+│   ├── delivery-guidelines.md
+│   └── developer-guide.md
 │
-├── src/                        # Código-fonte
-│   ├── apps/                   # Microservices e apps
-│   │   ├── frontend_flutter/          # Frontend Flutter
-│   │   ├── auth_service/              # Autenticação
-│   │   ├── code_review_agent/         # Code review GitHub
-│   │   ├── grading_agent/             # Correção automatizada
-│   │   ├── award_methodology_agent/   # Sistema de premiação
-│   │   ├── content_generator_agent/   # Geração de conteúdo
-│   │   ├── research_management/       # Gestão IC
-│   │   ├── gamified_exams/            # Provas gamificadas
-│   │   ├── content_reviewer_agent/    # Revisão de conteúdo
-│   │   └── approval_interface/        # Interface de aprovação
-│   │
-│   └── shared/                 # Código compartilhado (a criar)
-│
-├── infrastructure/             # IaC
 └── .gitignore
 ```
+
+> **Arquitetura de Monorepo**: Este projeto utiliza uma estrutura de monorepo onde cada aplicação é um pacote independente e instalável. Pacotes Python seguem a convenção `pyproject.toml` e pacotes Flutter usam `pubspec.yaml`.
 
 ---
 
@@ -161,33 +176,58 @@ FLUTTER_API_BASE_URL=http://localhost:8000  # ou URL de prod
 
 #### 3. Setup Backend (Python)
 
-Para cada microservice Python:
+Para cada pacote Python, use instalação em modo editável:
 
 ```bash
-cd src/apps/auth_service  # ou outro serviço
+# Instalar um pacote específico
+cd packages/auth_service
 
-# Criar ambiente virtual
+# Criar ambiente virtual (opcional, mas recomendado)
 python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
 
-# Ativar (Linux/Mac)
-source venv/bin/activate
-# Ativar (Windows)
-venv\Scripts\activate
-
-# Instalar dependências
-pip install -r requirements.txt
+# Instalar o pacote em modo editável com dependências de desenvolvimento
+pip install -e ".[dev]"
 
 # Rodar testes
 pytest
 
 # Rodar localmente (se FastAPI)
-uvicorn src.main:app --reload --port 8001
+cd src/auth_service
+python -m auth_service.main
+# ou
+uvicorn auth_service.main:app --reload --port 8001
+```
+
+**Instalando múltiplos pacotes:**
+
+```bash
+# Da raiz do projeto
+pip install -e packages/auth_service
+pip install -e packages/code_review_agent
+pip install -e packages/grading_agent
+# ... etc
+```
+
+**Usando dependências entre pacotes:**
+
+Se um pacote depende de outro, adicione ao `pyproject.toml`:
+
+```toml
+[project]
+dependencies = [
+    "auth-service @ file:///path/to/packages/auth_service",
+    # ou para desenvolvimento local
+]
 ```
 
 #### 4. Setup Frontend (Flutter)
 
+Para cada pacote Flutter:
+
 ```bash
-cd src/apps/frontend_flutter
+cd packages_dashboard/frontend_flutter
 
 # Instalar dependências
 flutter pub get
@@ -200,7 +240,41 @@ flutter test
 
 # Rodar app (escolher device)
 flutter devices
-flutter run
+flutter run -d chrome  # Para web
+flutter run           # Para dispositivo conectado
+```
+
+**Usando dependências entre pacotes Flutter:**
+
+Se um pacote Flutter depende de outro, adicione ao `pubspec.yaml`:
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Dependência de outro pacote local
+  approval_interface:
+    path: ../approval_interface
+  
+  gamified_exams:
+    path: ../gamified_exams
+```
+
+**Estrutura de pacote Flutter:**
+
+```
+packages_dashboard/seu_pacote/
+├── lib/
+│   ├── src/           # Código privado
+│   │   ├── widgets/
+│   │   ├── screens/
+│   │   └── services/
+│   └── seu_pacote.dart  # Exports públicos
+├── test/
+│   └── seu_pacote_test.dart
+├── pubspec.yaml
+└── README.md
 ```
 
 #### 5. Setup Infraestrutura (Terraform - exemplo AWS)
