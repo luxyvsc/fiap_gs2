@@ -45,7 +45,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
-          cache-dependency-path: 'src/apps/**/requirements.txt'
       
       - name: Check if service has implementation
         id: check_service
@@ -63,13 +62,15 @@ jobs:
         run: |
           cd src/apps/${{ matrix.service }}
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          # Instala dependências principais se existir requirements.txt
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          fi
           
-          # Install development dependencies if they exist
+          # Instala dependências de desenvolvimento ou ferramentas padrão
           if [ -f "requirements-dev.txt" ]; then
             pip install -r requirements-dev.txt
           else
-            # Install standard dev tools
             pip install pytest pytest-cov black isort flake8 mypy
           fi
 
