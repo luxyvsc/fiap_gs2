@@ -1,23 +1,17 @@
-name: Copilot Setup Steps
+name: "Copilot Setup Steps"
 
 # This workflow runs setup, validation, and testing steps for the FIAP AI-Enhanced Learning Platform
 # It supports the multi-language stack (Python, Flutter, R) and follows the project's coding standards
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
-      - develop
-      - 'feature/**'
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
   pull_request:
-    branches:
-      - main
-      - develop
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
 
-# Minimal permissions following security best practices
-permissions:
-  contents: read
-  pull-requests: read
 
 jobs:
   # Job 1: Python Backend Services Validation
@@ -77,46 +71,6 @@ jobs:
             # Install standard dev tools
             pip install pytest pytest-cov black isort flake8 mypy
           fi
-      
-      - name: Run code formatting check (Black)
-        if: steps.check_service.outputs.has_requirements == 'true'
-        run: |
-          cd src/apps/${{ matrix.service }}
-          black --check --diff .
-        continue-on-error: true
-      
-      - name: Run import sorting check (isort)
-        if: steps.check_service.outputs.has_requirements == 'true'
-        run: |
-          cd src/apps/${{ matrix.service }}
-          isort --check-only --diff .
-        continue-on-error: true
-      
-      - name: Run linter (flake8)
-        if: steps.check_service.outputs.has_requirements == 'true'
-        run: |
-          cd src/apps/${{ matrix.service }}
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=88 --statistics
-        continue-on-error: true
-      
-      - name: Run type checking (mypy)
-        if: steps.check_service.outputs.has_requirements == 'true'
-        run: |
-          cd src/apps/${{ matrix.service }}
-          mypy . --ignore-missing-imports || true
-        continue-on-error: true
-      
-      - name: Run tests with coverage
-        if: steps.check_service.outputs.has_requirements == 'true'
-        run: |
-          cd src/apps/${{ matrix.service }}
-          if [ -d "tests" ] || [ -d "test" ]; then
-            pytest --cov=src --cov-report=xml --cov-report=term-missing || echo "⚠️ Tests not yet implemented"
-          else
-            echo "⚠️ No tests directory found - tests will be added during implementation phase"
-          fi
-        continue-on-error: true
 
   # Job 2: Flutter Frontend Validation
   flutter-frontend-validation:
@@ -130,7 +84,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
+          flutter-version: '3.35.6'
           channel: 'stable'
           cache: true
       
@@ -156,26 +110,19 @@ jobs:
           cd src/apps/frontend_flutter
           flutter analyze
         continue-on-error: true
-      
+
       - name: Run Flutter formatting check
         if: steps.check_flutter.outputs.has_pubspec == 'true'
         run: |
           cd src/apps/frontend_flutter
           dart format --set-exit-if-changed .
         continue-on-error: true
-      
+
       - name: Run Flutter tests
         if: steps.check_flutter.outputs.has_pubspec == 'true'
         run: |
           cd src/apps/frontend_flutter
           flutter test || echo "⚠️ Tests not yet implemented"
-        continue-on-error: true
-      
-      - name: Build Flutter web (validation)
-        if: steps.check_flutter.outputs.has_pubspec == 'true'
-        run: |
-          cd src/apps/frontend_flutter
-          flutter build web --release || echo "⚠️ Build will be validated during implementation"
         continue-on-error: true
 
   # Job 3: R Analytics Scripts Validation
@@ -284,61 +231,20 @@ jobs:
           
           echo "✅ Security scan complete"
 
-  # Job 5: Security and Dependency Scanning
-  security-scanning:
-    name: Security & Dependency Scanning
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Check for Python security vulnerabilities
-        run: |
-          pip install safety bandit
-          
-          # Scan for known vulnerabilities in dependencies (if requirements files exist)
-          for req_file in $(find src/apps -name "requirements*.txt" 2>/dev/null); do
-            if [ -f "$req_file" ]; then
-              echo "🔍 Scanning $req_file for vulnerabilities..."
-              safety check --file="$req_file" --output text || echo "⚠️ Vulnerabilities found in $req_file"
-            fi
-          done
-          
-          # Scan Python code for security issues (if code exists)
-          if find src/apps -name "*.py" | grep -q .; then
-            echo "🔍 Running Bandit security scan..."
-            bandit -r src/apps -f txt || echo "⚠️ Security issues found"
-          else
-            echo "ℹ️ No Python code to scan yet (planning phase)"
-          fi
-        continue-on-error: true
-      
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'table'
-          exit-code: '0'  # Don't fail the build, just report
-
-  # Job 6: Build Summary and Status
-  build-summary:
+  copilot-setup-steps:
     name: Build Summary
     runs-on: ubuntu-latest
+
+    permissions:
+      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
+      contents: read
+
     needs: 
       - python-backend-validation
       - flutter-frontend-validation
       - r-analytics-validation
       - documentation-validation
-      - security-scanning
-    if: always()
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -354,8 +260,6 @@ jobs:
           echo "| Python Backend | ${{ needs.python-backend-validation.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Flutter Frontend | ${{ needs.flutter-frontend-validation.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| R Analytics | ${{ needs.r-analytics-validation.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Documentation | ${{ needs.documentation-validation.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Security Scanning | ${{ needs.security-scanning.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## 📝 Project Information" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
