@@ -45,6 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
+          cache-dependency-path: 'src/apps/**/requirements.txt'
       
       - name: Check if service has implementation
         id: check_service
