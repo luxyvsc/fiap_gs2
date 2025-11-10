@@ -80,7 +80,7 @@ Este projeto integra todas as disciplinas do curso:
 
 Para detalhes completos sobre configuração, desenvolvimento e contribuição, consulte:
 
-📖 **[.github/copilot-instructions.md](.github/copilot-instructions.md)** - Guia completo para desenvolvedores
+📖 **[docs/developer-guide.md](docs/copilot-instructions.md)** - Guia completo para desenvolvedores
 
 📋 **[docs/roadmap-overview.md](docs/roadmap-overview.md)** - Roadmap detalhado de implementação
 
