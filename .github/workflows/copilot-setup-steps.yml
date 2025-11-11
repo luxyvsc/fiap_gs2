@@ -14,128 +14,64 @@ on:
 
 
 jobs:
-  # Job 1: Python Backend Services Validation
-  python-backend-validation:
-    name: Python Backend Services
+
+  copilot-setup-steps:
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        python-version: ['3.11', '3.12']
-        service:
-          - auth_service
-          - code_review_agent
-          - grading_agent
-          - award_methodology_agent
-          - content_generator_agent
-          - research_management
-          - gamified_exams
-          - content_reviewer_agent
-          - mental_health_agent
-          - plagiarism_detection_agent
-          - ai_usage_detection_agent
-          - approval_interface
-    
+
+    permissions:
+      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
+      contents: read
+
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Python Set up ${{ matrix.python-version }}
+
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.11'
           cache: 'pip'
-      
-      - name: Check if service has implementation
-        id: check_service
-        run: |
-          SERVICE_PATH="src/apps/${{ matrix.service }}"
-          if [ -f "$SERVICE_PATH/requirements.txt" ]; then
-            echo "has_requirements=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_requirements=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Service ${{ matrix.service }} has no requirements.txt yet (planning phase)"
-          fi
-      
+
+      - name: Check Python Version
+        run: python --version
+
       - name: Install Python dependencies
-        if: steps.check_service.outputs.has_requirements == 'true'
         run: |
-          cd src/apps/${{ matrix.service }}
-          python -m pip install --upgrade pip
-          # Instala dependências principais se existir requirements.txt
+          # Instalar dependências globais se houver requirements.txt na raiz
           if [ -f "requirements.txt" ]; then
             pip install -r requirements.txt
           fi
-          
-          # Instala dependências de desenvolvimento ou ferramentas padrão
-          if [ -f "requirements-dev.txt" ]; then
-            pip install -r requirements-dev.txt
-          else
-            pip install pytest pytest-cov black isort flake8 mypy
-          fi
+          # Instalar pacotes Python em modo editável
+          for package in packages/*/; do
+            if [ -f "$package/pyproject.toml" ]; then
+              cd "$package"
+              pip install -e ".[dev]"
+              cd ../..
+            fi
+          done
 
-  # Job 2: Flutter Frontend Validation
-  flutter-frontend-validation:
-    name: Flutter Frontend
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.6'
           channel: 'stable'
           cache: true
-      
-      - name: Check if Flutter app exists
-        id: check_flutter
-        run: |
-          if [ -f "src/apps/frontend_flutter/pubspec.yaml" ]; then
-            echo "has_pubspec=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_pubspec=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Flutter app not yet implemented (planning phase)"
-          fi
-      
+
+      - name: Check Flutter Version
+        run: flutter --version
+
       - name: Install Flutter dependencies
-        if: steps.check_flutter.outputs.has_pubspec == 'true'
         run: |
-          cd src/apps/frontend_flutter
-          flutter pub get
-      
-      - name: Run Flutter analyzer
-        if: steps.check_flutter.outputs.has_pubspec == 'true'
-        run: |
-          cd src/apps/frontend_flutter
-          flutter analyze
-        continue-on-error: true
+          # Instalar dependências Flutter
+          for package in packages_dashboard/*/; do
+            if [ -f "$package/pubspec.yaml" ]; then
+              cd "$package"
+              flutter pub get
+              cd ../..
+            fi
+          done
 
-      - name: Run Flutter formatting check
-        if: steps.check_flutter.outputs.has_pubspec == 'true'
-        run: |
-          cd src/apps/frontend_flutter
-          dart format --set-exit-if-changed .
-        continue-on-error: true
-
-      - name: Run Flutter tests
-        if: steps.check_flutter.outputs.has_pubspec == 'true'
-        run: |
-          cd src/apps/frontend_flutter
-          flutter test || echo "⚠️ Tests not yet implemented"
-        continue-on-error: true
-
-  #Job 3
-  firebase-setup:
-    name: Firebase Emulator Setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Ensure Node.js is installed (See https://github.com/actions/setup-node)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -182,137 +118,3 @@ jobs:
         run: |
           echo "--- emulators.log (tail) ---"
           tail -n 200 emulators.log || true
-
-  # Job 4: Documentation and Repository Health
-  documentation-validation:
-    name: Documentation & Repository Health
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      
-      - name: Check required documentation files
-        run: |
-          echo "📋 Checking documentation completeness..."
-          
-          required_files=(
-            "README.md"
-            ".gitignore"
-            "docs/developer-guide.md"
-            "docs/roadmap-overview.md"
-            "docs/discipline-mapping.md"
-            "docs/delivery-guidelines.md"
-          )
-          
-          missing_files=()
-          for file in "${required_files[@]}"; do
-            if [ ! -f "$file" ]; then
-              missing_files+=("$file")
-            fi
-          done
-          
-          if [ ${#missing_files[@]} -eq 0 ]; then
-            echo "✅ All required documentation files present"
-          else
-            echo "⚠️ Missing documentation files:"
-            printf '%s\n' "${missing_files[@]}"
-          fi
-      
-      - name: Validate Markdown files
-        run: |
-          echo "📝 Validating Markdown files..."
-          # Check for broken links and common markdown issues
-          find . -name "*.md" -type f | while read file; do
-            echo "Checking $file"
-          done
-          echo "✅ Markdown validation complete"
-      
-      - name: Check for sensitive data in repository
-        run: |
-          echo "🔒 Scanning for sensitive data patterns..."
-          
-          # Check for common secret patterns (basic check)
-          if git log --all -S 'AWS_SECRET_ACCESS_KEY' --pretty=format: > /dev/null 2>&1; then
-            echo "⚠️ Warning: Potential AWS secret found in git history"
-          fi
-          
-          if git log --all -S 'OPENAI_API_KEY' --pretty=format: > /dev/null 2>&1; then
-            echo "⚠️ Warning: Potential OpenAI API key found in git history"
-          fi
-          
-          # Check .env is in .gitignore
-          if grep -q "^\.env$" .gitignore; then
-            echo "✅ .env properly ignored"
-          else
-            echo "⚠️ Warning: .env should be in .gitignore"
-          fi
-          
-          echo "✅ Security scan complete"
-
-  copilot-setup-steps:
-    name: Build Summary
-    runs-on: ubuntu-latest
-
-    permissions:
-      # If you want to clone the repository as part of your setup steps, for example to install dependencies, you'll need the `contents: read` permission. If you don't clone the repository in your setup steps, Copilot will do this for you automatically after the steps complete.
-      contents: read
-
-    needs: 
-      - python-backend-validation
-      - flutter-frontend-validation
-      - firebase-setup
-      - documentation-validation
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Check Flutter Version
-        run: flutter --version
-
-      - name: Check Python Version
-        run: python --version
-
-      - name: Check npm Version
-        run: npm --version
-
-      - name: Check Java Version
-        run: java -version
-
-      - name: Display Firebase Emulator Status
-        run: |
-          echo "Displaying Firebase Emulator log tail..."
-          if [ -f "emulators.log" ]; then
-            tail -n 50 emulators.log
-          else
-            echo "⚠️ emulators.log not found"
-          fi
-      
-      - name: Generate build summary
-        run: |
-          echo "# 🎯 FIAP AI-Enhanced Learning Platform - Build Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 📊 Job Status" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
-          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Python Backend | ${{ needs.python-backend-validation.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Flutter Frontend | ${{ needs.flutter-frontend-validation.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| R Analytics | ${{ needs.r-analytics-validation.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## 📝 Project Information" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Project**: FIAP AI-Enhanced Learning Platform (Global Solution 2025.2)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Phase**: Documentation/Planning → Implementation" >> $GITHUB_STEP_SUMMARY
-          echo "- **Technologies**: Python 3.11+, Flutter 3.x, R, AWS Serverless" >> $GITHUB_STEP_SUMMARY
-          echo "- **Architecture**: 13 microservices + Frontend + Analytics" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "## ⚠️ Notes" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Many checks use `continue-on-error` as the project is in planning phase" >> $GITHUB_STEP_SUMMARY
-          echo "- Implementation files will be added progressively according to roadmaps" >> $GITHUB_STEP_SUMMARY
-          echo "- All validations will become mandatory once implementation begins" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "---" >> $GITHUB_STEP_SUMMARY
-          echo "_Generated by GitHub Actions | Workflow: copilot-setup-steps.yml_" >> $GITHUB_STEP_SUMMARY
