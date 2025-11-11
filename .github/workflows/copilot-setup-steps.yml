@@ -148,17 +148,40 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # Start the Firebase Emulator Suite using a maintained action
-      - name: Start Firebase Emulator Suite
-        uses: w9jds/firebase-emulator-action@v2
-        with:
-          firebase-tools-version: 'latest'
-          emulators: 'auth,firestore,functions,storage,database'
-          project-id: 'test-project'
-          max-retries: '3'
-          max-checks: '60'
-          wait-time: '1'
-          check-port: '9099'
+      # Start the Firebase Emulator Suite using explicit CLI steps (safer than relying on an external action)
+      - name: Install firebase-tools
+        run: |
+          echo "Installing firebase-tools..."
+          npm install -g firebase-tools@latest
+          firebase --version || true
+
+      - name: Start Firebase Emulators (background)
+        run: |
+          echo "Starting Firebase Emulator Suite in background..."
+          # Start emulators in background and capture logs and PID
+          nohup firebase emulators:start --only auth,firestore,functions,storage,database --project test-project > emulators.log 2>&1 &
+          echo $! > emulators.pid
+
+      - name: Wait for Firebase Emulators to be ready
+        run: |
+          echo "Waiting for emulators to be ready (max 60s)..."
+          for i in $(seq 1 60); do
+            if grep -i "all emulators" emulators.log >/dev/null 2>&1 || grep -i "emulators started" emulators.log >/dev/null 2>&1; then
+              echo "Firebase Emulators ready after $i seconds"
+              break
+            fi
+            sleep 1
+          done
+          if [ ! -s emulators.log ]; then
+            echo "⚠️ emulators.log is empty; emulator may have failed to start"
+            tail -n 200 emulators.log || true
+            exit 1
+          fi
+
+      - name: Show emulator log tail
+        run: |
+          echo "--- emulators.log (tail) ---"
+          tail -n 200 emulators.log || true
 
   # Job 4: Documentation and Repository Health
   documentation-validation:
