@@ -254,6 +254,35 @@ Key guidelines:
 - Always use a dedicated `project-id` for emulated tests (for example `test-project`) and do not reuse production project IDs.
 - Ensure CI jobs that start emulators run tests in the same job (runners can't share running background processes across jobs).
 
+Note (environment): The Firebase Emulator Suite is already running in the current development environment. The agents and tests should connect to the emulated services using the `test-project` project id and the following default ports (unless overridden in a custom `firebase.json`):
+
+- Firestore emulator: 8080
+- Realtime Database emulator: 9000
+- Authentication (Auth) emulator: 9099
+- Functions emulator: 5001
+- Storage emulator: 9199
+
+Agentes de IA que precisem consultar ou executar funções devem usar essas portas para conexões locais. Não use credenciais de produção ao apontar para os emuladores.
+
+How to check the running emulators and ports (Windows cmd.exe):
+
+```cmd
+REM Check if a given port is listening (replace 8080 with the port you need)
+netstat -ano | findstr :8080
+
+REM If you need the process id from netstat output, use tasklist to map PID to process name
+tasklist /FI "PID eq <PID_FROM_NETSTAT>"
+
+REM View emulator log file if started with nohup in CI (or created by the workflow)
+type emulators.log | more
+```
+
+If you are using PowerShell you can also tail the log interactively:
+
+```powershell
+Get-Content .\emulators.log -Wait -Tail 200
+```
+
 Example (Windows cmd - interactive):
 
 ```cmd
@@ -275,7 +304,6 @@ npm install -g firebase-tools@latest
 
 # Start emulators in background and capture logs (Linux runners)
 nohup firebase emulators:start --only auth,firestore,functions,storage,database --project test-project > emulators.log 2>&1 &
-echo $! > emulators.pid
 
 # Wait/health-check loop (basic)
 for i in $(seq 1 60); do
@@ -342,7 +370,7 @@ jobs:
 ```json
 {
   "success": true,
-  "data": { ... },
+  "data": {},
   "error": null
 }
 ```
