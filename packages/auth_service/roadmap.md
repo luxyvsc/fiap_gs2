@@ -28,41 +28,32 @@ Serviço de autenticação e autorização responsável por gerenciar identidade
 
 ### Stack Tecnológico
 - **Framework**: FastAPI (Python 3.11+)
-- **Auth**: PyJWT, passlib para hashing
-- **OAuth2**: authlib para integração
-- **Validação**: Pydantic
-- **Database**: DynamoDB (users, sessions) ou Aurora Serverless
-- **Deployment**: AWS Lambda + API Gateway
+- **Auth**: Firebase Admin SDK para autenticação
+- **OAuth2**: Firebase Auth (Google, Microsoft integrados)
+- **Validação**: Pydantic v2
+- **Database**: Firebase Authentication (usuários) + Firestore (dados adicionais se necessário)
+- **Deployment**: Google Cloud Functions + Firebase Hosting ou Cloud Run
 
 ### Estrutura
 
 ```
 auth_service/
 ├── src/
-│   ├── main.py                 # FastAPI app / Lambda handler
-│   ├── api/
-│   │   ├── auth_routes.py      # Endpoints de autenticação
-│   │   └── user_routes.py      # Endpoints de usuários
-│   ├── core/
-│   │   ├── security.py         # JWT, hashing, crypto
-│   │   ├── config.py           # Configurações
-│   │   └── dependencies.py     # FastAPI dependencies
-│   ├── models/
-│   │   ├── user.py             # User model
-│   │   └── token.py            # Token model
-│   ├── services/
-│   │   ├── auth_service.py     # Lógica de autenticação
-│   │   ├── oauth_service.py    # OAuth2 providers
-│   │   └── user_service.py     # CRUD de usuários
-│   └── repositories/
-│       └── user_repository.py  # Acesso ao banco
+│   ├── auth_service/
+│   │   ├── __init__.py         # Exports do pacote
+│   │   ├── firebase_admin.py   # Inicialização Firebase Admin SDK
+│   │   ├── middleware.py       # Middleware FastAPI para verificação de tokens
+│   │   ├── models.py           # Modelos Pydantic (AuthUser, FirebaseConfig)
+│   │   ├── utils.py            # Funções utilitárias
+│   │   └── example.py          # Exemplo de aplicação FastAPI
 ├── tests/
-│   ├── test_auth_routes.py
-│   ├── test_security.py
-│   └── fixtures.py
-├── requirements.txt
-├── serverless.yml              # Serverless Framework config
-└── README.md
+│   ├── conftest.py
+│   ├── test_config.py
+│   ├── test_models.py
+│   └── test_utils.py
+├── pyproject.toml              # Metadados e dependências
+├── README.md
+└── CHANGELOG.md
 ```
 
 ---
@@ -72,19 +63,20 @@ auth_service/
 ### Fase 1: Setup e Core
 
 #### 1.1 Setup do Projeto
-- [ ] Criar estrutura de pastas
-- [ ] Configurar `requirements.txt`:
+- [x] Criar estrutura de pastas (já implementado)
+- [x] Configurar `pyproject.toml` com dependências:
   ```
-  fastapi==0.104.1
-  pydantic==2.5.0
-  python-jose[cryptography]==3.3.0
-  passlib[bcrypt]==1.7.4
-  python-multipart==0.0.6
-  boto3==1.29.0  # Para AWS
-  authlib==1.2.1
+  fastapi>=0.104.1
+  pydantic>=2.5.0
+  pydantic-settings>=2.1.0
+  firebase-admin>=6.2.0
+  python-multipart>=0.0.6
+  uvicorn[standard]>=0.24.0
+  email-validator>=2.1.1
+  mangum>=0.17.0
   ```
-- [ ] Setup de environments (.env para dev, secrets manager para prod)
-- [ ] Configurar serverless.yml para deploy
+- [x] Setup de environments (.env para dev, Google Cloud Secrets para prod)
+- [x] Configurar deploy para Google Cloud Functions
 
 **Critérios de Aceitação**:
 - Projeto criado e dependências instaladas
@@ -520,39 +512,39 @@ pytest --cov=src --cov-report=html
 
 ---
 
-## 📊 Database Schema (DynamoDB)
+## 📊 Database Schema (Firebase)
 
-### Table: symbiowork-users
+### Firebase Authentication
+- Usuários gerenciados nativamente pelo Firebase Auth
+- Suporte integrado a OAuth2 (Google, Microsoft, etc.)
+- Custom claims para roles (RBAC)
+- Multi-tenant com projetos Firebase
+
+### Firestore (dados adicionais, opcional)
 ```
-Partition Key: user_id (String, UUID)
-GSI: email-index (email as partition key)
-
-Attributes:
-- user_id: String (UUID)
-- email: String (unique)
-- full_name: String
-- hashed_password: String (null for OAuth users)
-- is_active: Boolean
-- role: String (user, recruiter, admin)
-- oauth_provider: String (google, microsoft, null)
-- created_at: Number (timestamp)
-- updated_at: Number (timestamp)
-```
-
-### Table: symbiowork-refresh-tokens
-```
-Partition Key: token_id (String, UUID)
-GSI: user_id-index
-
-Attributes:
-- token_id: String
-- user_id: String
-- token_hash: String
-- expires_at: Number (timestamp)
-- revoked: Boolean
-- created_at: Number
+Collection: users/{user_id}
+Document Fields:
+- email: string
+- full_name: string
+- role: string (user, admin, etc.)
+- tenant_id: string (para multi-tenant)
+- created_at: timestamp
+- updated_at: timestamp
+- custom_claims: map (para RBAC)
 ```
 
+### Custom Claims (para JWT)
+- Roles armazenados como custom claims no Firebase Auth
+- Claims incluídos automaticamente nos ID tokens
+- Exemplo:
+  ```json
+  {
+    "sub": "user_id",
+    "email": "user@example.com",
+    "role": "admin",
+    "tenant_id": "school_123"
+  }
+  ```
 ---
 
 ## ✅ Critérios de Aceitação Final
@@ -571,65 +563,67 @@ Attributes:
 
 ---
 
-## 🚀 Deploy (Serverless Framework)
+## 🚀 Deploy (Google Cloud)
 
+### Google Cloud Functions
 ```yaml
-# serverless.yml
-service: symbiowork-auth
+# main.py (Cloud Function entry point)
+from mangum import Mangum
+from auth_service.example import app
 
-provider:
-  name: aws
-  runtime: python3.11
-  region: us-east-1
-  environment:
-    DYNAMODB_TABLE_USERS: ${self:service}-users-${opt:stage, 'dev'}
-    JWT_SECRET: ${env:JWT_SECRET}
-    GOOGLE_CLIENT_ID: ${env:GOOGLE_CLIENT_ID}
-    GOOGLE_CLIENT_SECRET: ${env:GOOGLE_CLIENT_SECRET}
+handler = Mangum(app)
+```
 
-functions:
-  api:
-    handler: src.main.handler
-    events:
-      - http:
-          path: /{proxy+}
-          method: ANY
-          cors: true
+### Deploy via gcloud CLI
+```bash
+# Configurar projeto
+gcloud config set project YOUR_PROJECT_ID
 
-resources:
-  Resources:
-    UsersTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:service}-users-${opt:stage, 'dev'}
-        AttributeDefinitions:
-          - AttributeName: user_id
-            AttributeType: S
-          - AttributeName: email
-            AttributeType: S
-        KeySchema:
-          - AttributeName: user_id
-            KeyType: HASH
-        GlobalSecondaryIndexes:
-          - IndexName: email-index
-            KeySchema:
-              - AttributeName: email
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-        BillingMode: PAY_PER_REQUEST
+# Deploy da função
+gcloud functions deploy auth-service \
+  --runtime python311 \
+  --trigger-http \
+  --allow-unauthenticated \
+  --entry-point handler \
+  --source . \
+  --env-vars-file .env.yaml
+
+# Para produção, usar secrets
+gcloud functions deploy auth-service \
+  --runtime python311 \
+  --trigger-http \
+  --allow-unauthenticated \
+  --entry-point handler \
+  --source . \
+  --set-secrets FIREBASE_SERVICE_ACCOUNT_JSON=FIREBASE_SA:latest
+```
+
+### Environment Variables (Google Cloud)
+```yaml
+# .env.yaml para desenvolvimento
+FIREBASE_PROJECT_ID: your-project-id
+FIREBASE_SERVICE_ACCOUNT_JSON: '{"type":"service_account",...}'
+
+# Para produção: usar Google Cloud Secrets Manager
+```
+
+### Firebase Hosting (opcional para frontend)
+```json
+// firebase.json
+{
+  "hosting": {
+    "public": "build",
+    "rewrites": [
+      {
+        "source": "/api/**",
+        "function": "auth-service"
+      }
+    ]
+  }
+}
 ```
 
 Deploy:
 ```bash
-serverless deploy --stage prod
+firebase deploy --only hosting
 ```
-
----
-
-## 📚 Referências
-
-- [FastAPI Security](https://fastapi.tiangolo.com/tutorial/security/)
-- [PyJWT Documentation](https://pyjwt.readthedocs.io/)
-- [OAuth2 RFC](https://oauth.net/2/)
-- [OWASP Auth Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
