@@ -4,6 +4,10 @@ Firebase Auth Emulator Example
 This example demonstrates how to use Firebase Authentication with the Firebase Emulator.
 It shows common operations like user creation, authentication, and token management.
 
+⚠️  SECURITY NOTE: This is a demonstration app using the Firebase Emulator with test data.
+In production applications, never log sensitive user data like phone numbers, emails,
+or tokens. This example logs such data only for educational purposes in a local emulator environment.
+
 Prerequisites:
 1. Start Firebase Auth Emulator:
    firebase emulators:start --only auth --project demo-test-project
@@ -106,6 +110,7 @@ def example_update_user(uid):
     print(f"✅ User updated:")
     print(f"   Display Name: {updated_user.display_name}")
     print(f"   Email Verified: {updated_user.email_verified}")
+    # Note: In production, avoid logging PII like phone numbers. This is demo data only.
     print(f"   Phone: {updated_user.phone_number}")
     
     return updated_user
