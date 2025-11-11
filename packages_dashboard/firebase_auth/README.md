@@ -5,13 +5,15 @@ Firebase Authentication package for Flutter frontend in the FIAP AI-Enhanced Lea
 ## 🔐 Overview
 
 This Flutter package provides comprehensive Firebase Authentication functionality including:
-- Firebase initialization
+- Firebase initialization functions
+- Authentication provider with Riverpod (login, logout, register, password recovery)
+- Pre-built Login and Register widgets
+- Automatic authentication state management
 - Email/password authentication
-- Google Sign-In
-- Custom token authentication
-- Automatic token management with Dio interceptor
+- Password recovery
+- Email verification
 - Role-Based Access Control (RBAC) widgets
-- Tenant/multi-organization support
+- `context.watch` pattern for checking authentication state
 - Riverpod state management integration
 
 ## 🚀 Installation
@@ -98,181 +100,124 @@ FirebaseConfig getFirebaseConfig() {
 
 ## 💻 Usage
 
-### Basic Authentication
+### 1. Initialize Firebase
+
+In your `main.dart`:
 
 ```dart
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authService = ref.read(authServiceProvider);
-    
-    return ElevatedButton(
-      onPressed: () async {
-        try {
-          final user = await authService.signInWithEmailAndPassword(
-            email: 'user@example.com',
-            password: 'password123',
-          );
-          print('Signed in: ${user.email}');
-        } catch (e) {
-          print('Error: $e');
-        }
-      },
-      child: Text('Sign In'),
-    );
-  }
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await FirebaseInitService.initialize(
+    apiKey: 'YOUR_API_KEY',
+    authDomain: 'your-project.firebaseapp.com',
+    projectId: 'your-project-id',
+    storageBucket: 'your-project.appspot.com',
+    messagingSenderId: '123456789',
+    appId: '1:123456789:web:abcdef',
+  );
+  
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 ```
 
-### Using AuthWrapper Widget
+### 2. Use AuthWrapper with context.watch
+
+The package automatically manages authentication state. Use `AuthWrapper` to show login when not authenticated:
 
 ```dart
-import 'package:firebase_auth/firebase_auth.dart';
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: AuthWrapper(
         child: HomeScreen(), // Shown when authenticated
-        signedOutBuilder: (context) => LoginScreen(), // Shown when not authenticated
-        loadingBuilder: (context) => LoadingScreen(), // Shown while checking auth
+        signedOutBuilder: (context) => AuthScreen(), // Shown when not authenticated
       ),
     );
   }
 }
 ```
 
-### Sign In Methods
-
-#### Email & Password
+### 3. Create Auth Screen with Login/Register
 
 ```dart
-final authService = ref.read(authServiceProvider);
+class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen(BuildContext context, {Key? key}) : super(key: key);
 
-// Sign in
-final user = await authService.signInWithEmailAndPassword(
-  email: email,
-  password: password,
-);
+  @override
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
+}
 
-// Create account
-final newUser = await authService.createUserWithEmailAndPassword(
-  email: email,
-  password: password,
-  displayName: 'John Doe',
-);
-```
+class _AuthScreenState extends ConsumerState<AuthScreen> {
+  bool _showLogin = true;
 
-#### Google Sign-In
-
-```dart
-final user = await authService.signInWithGoogle();
-```
-
-#### Custom Token (After Backend OAuth)
-
-```dart
-// Backend returns custom token after OAuth
-final customToken = await yourBackendApi.oauthCallback();
-
-// Sign in with custom token
-final user = await authService.signInWithCustomToken(customToken);
-```
-
-### Role-Based Access Control
-
-#### Using RoleGuard Widget
-
-```dart
-import 'package:firebase_auth/firebase_auth.dart';
-
-class AdminPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RoleGuard(
-      requiredRole: 'admin',
-      child: AdminDashboard(),
-      unauthorizedBuilder: (context) => Text('Admin access required'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_showLogin ? 'Login' : 'Cadastro'),
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: _showLogin
+              ? LoginWidget(
+                  onRegisterTap: () => setState(() => _showLogin = false),
+                )
+              : RegisterWidget(
+                  onLoginTap: () => setState(() => _showLogin = true),
+                ),
+        ),
+      ),
     );
   }
 }
 ```
 
-#### Using Providers
+### 4. Check Authentication State with context.watch
 
 ```dart
 class MyWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isAdmin = ref.watch(isAdminProvider);
-    final userRole = ref.watch(userRoleProvider);
+    // Watch authentication state
+    final isAuthenticated = ref.watch(isAuthenticatedProvider);
     
-    if (isAdmin) {
-      return AdminContent();
+    if (!isAuthenticated) {
+      return LoginScreen();
     }
     
-    return UserContent();
+    return HomeScreen();
   }
 }
 ```
 
-### Tenant-Based Access Control
+### 5. Access Current User
 
 ```dart
-class TenantDataScreen extends StatelessWidget {
-  final String tenantId;
-  
-  @override
-  Widget build(BuildContext context) {
-    return TenantGuard(
-      requiredTenantId: tenantId,
-      child: TenantContent(tenantId: tenantId),
-      unauthorizedBuilder: (context) => Text('Access denied'),
-    );
-  }
-}
-```
-
-### API Calls with Authentication
-
-```dart
-import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-// Create authenticated Dio client
-final authService = ref.read(authServiceProvider);
-final dio = createAuthenticatedDio(
-  authService: authService,
-  baseUrl: 'https://api.example.com',
-);
-
-// Make authenticated API calls
-// The interceptor automatically adds Authorization header
-final response = await dio.get('/api/v1/protected');
-```
-
-### Monitoring Authentication State
-
-```dart
-class UserProfileWidget extends ConsumerWidget {
+class ProfileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsync = ref.watch(authUserStreamProvider);
     
     return userAsync.when(
       data: (user) {
-        if (user == null) {
-          return Text('Not signed in');
-        }
+        if (user == null) return Text('Not signed in');
         return Column(
           children: [
             Text('Email: ${user.email}'),
+            Text('Name: ${user.displayName}'),
             Text('Role: ${user.role}'),
-            Text('Tenant: ${user.tenantId}'),
           ],
         );
       },
@@ -283,26 +228,93 @@ class UserProfileWidget extends ConsumerWidget {
 }
 ```
 
-### Sign Out
+### 6. Sign Out
 
 ```dart
-final authService = ref.read(authServiceProvider);
-await authService.signOut();
+ElevatedButton(
+  onPressed: () async {
+    await ref.read(authStateNotifierProvider.notifier).signOut();
+  },
+  child: Text('Logout'),
+)
 ```
 
 ## 🏗️ Available Providers
 
 ### Services
-- `authServiceProvider` - AuthService singleton
+- `authServiceProvider` - AuthService singleton for auth operations
 
-### State
-- `firebaseUserStreamProvider` - Stream of Firebase User
-- `authUserStreamProvider` - Stream of AuthUser with custom claims
-- `currentAuthUserProvider` - Current AuthUser (async)
-- `isAuthenticatedProvider` - Boolean: is user signed in?
-- `userRoleProvider` - Current user's role
-- `isAdminProvider` - Boolean: is user admin?
-- `userTenantIdProvider` - Current user's tenant ID
+### State Management
+- `firebaseUserStreamProvider` - Stream of Firebase User (with context.watch)
+- `authUserStreamProvider` - Stream of AuthUserModel with custom claims
+- `currentAuthUserProvider` - Current AuthUserModel (async)
+- `isAuthenticatedProvider` - Boolean: is user signed in? (use with context.watch)
+- `authStateNotifierProvider` - StateNotifier for auth operations (login, register, etc.)
+
+### Auth State Notifier Methods
+```dart
+final authNotifier = ref.read(authStateNotifierProvider.notifier);
+
+// Login
+await authNotifier.signIn(email, password);
+
+// Register
+await authNotifier.register(email, password, displayName);
+
+// Reset password
+await authNotifier.resetPassword(email);
+
+// Sign out
+await authNotifier.signOut();
+```
+
+## 🎨 Pre-built Widgets
+
+### LoginWidget
+Ready-to-use login form with email and password fields:
+```dart
+LoginWidget(
+  onRegisterTap: () {
+    // Navigate to register screen
+  },
+  onLoginSuccess: () {
+    // Optional callback after successful login
+  },
+)
+```
+
+### RegisterWidget
+Ready-to-use registration form:
+```dart
+RegisterWidget(
+  onLoginTap: () {
+    // Navigate to login screen
+  },
+  onRegisterSuccess: () {
+    // Optional callback after successful registration
+  },
+)
+```
+
+### AuthWrapper
+Automatically handles authentication state:
+```dart
+AuthWrapper(
+  child: HomeScreen(), // Shown when authenticated
+  signedOutBuilder: (context) => LoginScreen(), // When not authenticated
+  loadingBuilder: (context) => LoadingScreen(), // While checking
+)
+```
+
+### RoleGuard
+Show content only if user has required role:
+```dart
+RoleGuard(
+  requiredRole: 'admin',
+  child: AdminPanel(),
+  unauthorizedBuilder: (context) => Text('Access denied'),
+)
+```
 
 ## 🔐 Security Best Practices
 
