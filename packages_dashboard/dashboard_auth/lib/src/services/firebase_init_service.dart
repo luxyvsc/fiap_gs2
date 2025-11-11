@@ -85,7 +85,7 @@ class FirebaseInitService {
   /// Parameters:
   /// - [host]: Emulator host (e.g., 'localhost' or '127.0.0.1')
   /// - [port]: Emulator port (default is 9099 for Auth Emulator)
-  static void useAuthEmulator(String host, int port) {
+  static Future<void> useAuthEmulator(String host, int port) async {
     if (!_isInitialized) {
       throw StateError(
         'Firebase must be initialized before configuring emulator',
@@ -97,7 +97,12 @@ class FirebaseInitService {
       return;
     }
 
-    FirebaseAuth.instance.useAuthEmulator(host, port);
+    print('Configuring Firebase Auth to use emulator at $host:$port');
+    print(FirebaseAuth.instance);
+
+    await FirebaseAuth.instance.useAuthEmulator(host, port);
+
+    print('Firebase Auth emulator configured at $host:$port');
     _isEmulatorConfigured = true;
   }
 
@@ -123,15 +128,14 @@ class FirebaseInitService {
     // Initialize with minimal config for emulator
     final app = await initialize(
       apiKey: apiKey,
-      authDomain: '$projectId.firebaseapp.com',
+      appId: appId,
       projectId: projectId,
+      authDomain: '$projectId.firebaseapp.com',
       storageBucket: '$projectId.appspot.com',
       messagingSenderId: '123456789',
-      appId: appId,
     );
-
     // Configure emulator
-    useAuthEmulator(emulatorHost, emulatorPort);
+    await useAuthEmulator(emulatorHost, emulatorPort);
 
     return app;
   }

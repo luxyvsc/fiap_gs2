@@ -3,7 +3,7 @@ description: Example app demonstrating Firebase Auth with emulator
 publish_to: 'none'
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: ^3.9.2
 
 dependencies:
   flutter:
@@ -11,10 +11,6 @@ dependencies:
   
   dashboard_auth:
     path: ../
-  
-  # Firebase dependencies (will be inherited from dashboard_auth)
-  firebase_core: ^2.24.0
-  firebase_auth: ^4.16.0
 
 dev_dependencies:
   flutter_test:
