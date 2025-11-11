@@ -35,19 +35,19 @@ async def protected(user: AuthUser = Depends(verify_firebase_token)):
 
 ```bash
 # 1. Add to pubspec.yaml
-cd packages_dashboard/firebase_auth
+cd packages_dashboard/dashboard_auth
 flutter pub get
 ```
 
 ```yaml
 dependencies:
-  firebase_auth:
-    path: ../firebase_auth
+  dashboard_auth:
+    path: ../dashboard_auth
 ```
 
 ```dart
 // 2. Initialize Firebase
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
 - ✅ Custom claims management
 - ✅ User management utilities
 
-### Frontend Package: `firebase_auth`
+### Frontend Package: `dashboard_auth`
 - ✅ Firebase Flutter SDK integration
 - ✅ Email/password, Google, custom token auth
 - ✅ Automatic token management
@@ -215,7 +215,7 @@ if (user?.hasRole('admin') ?? false) {
 - **Integration Guide**: `docs/firebase-auth-integration.md` (13KB)
 - **Implementation Summary**: `docs/firebase-auth-implementation-summary.md` (10KB)
 - **Backend README**: `packages/auth_service/README.md` (8KB)
-- **Frontend README**: `packages_dashboard/firebase_auth/README.md` (9KB)
+- **Frontend README**: `packages_dashboard/dashboard_auth/README.md` (9KB)
 
 ## 🧪 Testing
 
@@ -225,7 +225,7 @@ cd packages/auth_service
 pytest --cov=src
 
 # Frontend tests
-cd packages_dashboard/firebase_auth
+cd packages_dashboard/dashboard_auth
 flutter test
 ```
 

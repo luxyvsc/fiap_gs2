@@ -44,9 +44,9 @@ Successfully refactored the authentication system from custom JWT-based authenti
 - ✅ Zero CodeQL security alerts
 - ✅ Black & isort formatted
 
-### 2. Frontend Package: `firebase_auth` (Flutter)
+### 2. Frontend Package: `dashboard_auth` (Flutter)
 
-**Location**: `packages_dashboard/firebase_auth/`
+**Location**: `packages_dashboard/dashboard_auth/`
 
 **Key Features**:
 - ✅ Firebase Flutter SDK integration
@@ -60,20 +60,20 @@ Successfully refactored the authentication system from custom JWT-based authenti
 - ✅ Comprehensive error handling
 
 **Files Created**:
-- `lib/firebase_auth.dart` - Main export file
+- `lib/dashboard_auth.dart` - Main export file
 - `lib/src/models/` - Data models (AuthUser, FirebaseConfig)
 - `lib/src/services/` - Services (FirebaseService, AuthService)
 - `lib/src/providers/` - Riverpod providers
 - `lib/src/interceptors/` - Dio auth interceptor
 - `lib/src/widgets/` - Auth wrapper widgets
-- `test/firebase_auth_test.dart` - Unit tests
+- `test/dashboard_auth_test.dart` - Unit tests
 - `pubspec.yaml` - Package configuration
 - `README.md` - Comprehensive documentation
 - `CHANGELOG.md` - Version history
 
 **Dependencies**:
 - `firebase_core: ^2.24.0` - Firebase core
-- `firebase_auth: ^4.16.0` - Firebase Authentication
+- `dashboard_auth: ^4.16.0` - Firebase Authentication
 - `flutter_riverpod: ^2.4.9` - State management
 - `dio: ^5.4.0` - HTTP client
 - `logger: ^2.0.2` - Logging
@@ -99,7 +99,7 @@ Successfully refactored the authentication system from custom JWT-based authenti
 ```
 ┌─────────────────┐         ┌──────────────────┐         ┌──────────────────┐
 │  Flutter App    │         │  Backend API     │         │  Google Cloud    │
-│  (firebase_auth)│────────▶│  (auth_service)  │────────▶│  (Vertex AI)     │
+│  (dashboard_auth)│────────▶│  (auth_service)  │────────▶│  (Vertex AI)     │
 └─────────────────┘         └──────────────────┘         └──────────────────┘
       │                            │                             │
       │ Firebase ID Token          │ Verify with Admin SDK      │ Service Account
@@ -155,7 +155,7 @@ async def protected_route(user: AuthUser = Depends(verify_firebase_token)):
 ### Frontend (Flutter)
 
 ```dart
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyApp extends StatelessWidget {
@@ -236,7 +236,7 @@ pytest --cov=src
 
 ### Flutter Package
 ```bash
-cd packages_dashboard/firebase_auth
+cd packages_dashboard/dashboard_auth
 flutter pub get
 flutter test
 ```
@@ -273,8 +273,8 @@ pip install -e ".[dev]"
 ```yaml
 # pubspec.yaml
 dependencies:
-  firebase_auth:
-    path: ../firebase_auth
+  dashboard_auth:
+    path: ../dashboard_auth
 ```
 
 ## Next Steps
@@ -284,7 +284,7 @@ dependencies:
 2. ✅ Set up Firebase project
 3. ✅ Configure service accounts
 4. ✅ Update microservices to use `auth_service`
-5. ✅ Update frontend apps to use `firebase_auth`
+5. ✅ Update frontend apps to use `dashboard_auth`
 6. ✅ Test authentication flows
 7. ✅ Deploy to staging environment
 8. ✅ Monitor and validate
@@ -317,7 +317,7 @@ dependencies:
 - `packages/auth_service/tests/` - 4 test files
 - `packages/auth_service/README.md`
 - `packages/auth_service/CHANGELOG.md`
-- `packages_dashboard/firebase_auth/` - Complete Flutter package
+- `packages_dashboard/dashboard_auth/` - Complete Flutter package
 - `docs/firebase-auth-integration.md`
 
 ### Total Lines of Code

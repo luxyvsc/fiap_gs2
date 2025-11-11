@@ -7,12 +7,11 @@
 **Current State**: Monorepo with package-based architecture. Python packages in `packages/` and Flutter packages in `packages_dashboard/`. Most packages contain roadmaps and minimal code, with `auth_service` having full implementation.
 
 **Tech Stack**:
-- Backend: Python 3.11+ with FastAPI, serverless (AWS Lambda/GCP Functions)
+- Backend: Python 3.11+ with FastAPI, serverless (Google Cloud Functions)
 - Frontend: Flutter 3.x (Dart) for web/mobile
 - AI Orchestration: CrewAI for multi-agent systems
 - ML: scikit-learn, TensorFlow, Transformers (BERT)
-- Analytics: R with tidyverse, ggplot2
-- Cloud: AWS (primary) - DynamoDB, Aurora Serverless, S3, Lambda, API Gateway
+- Cloud: Google Cloud Platform (primary) - Firestore, Cloud Functions, Cloud Storage, Firebase Authentication
 - CI/CD: GitHub Actions (to be implemented)
 - Package Management: pyproject.toml (Python), pubspec.yaml (Flutter)
 
@@ -68,16 +67,19 @@ fiap_gs2/
 1. Read the specific package's `packages/<package_name>/roadmap.md` or `packages_dashboard/<package_name>/roadmap.md`
 2. Review `docs/developer-guide.md` for coding standards, stack details, and patterns
 3. Check `docs/discipline-mapping.md` to understand which FIAP course requirements apply
+4. If creating new documentation specific to a package, place it in the package's `docs/` folder
 
 **When creating a new Python package**:
 1. Follow the structure defined in the package's roadmap.md exactly
 2. Standard Python package structure:
    ```
    packages/package_name/
+   ├── docs/                    # Package-specific documentation (if any)
+   ├── example/                 # Example app (if applicable)
    ├── src/
    │   └── package_name/        # Installable package
    │       ├── __init__.py
-   │       ├── main.py          # FastAPI app or Lambda handler
+   │       ├── main.py          # FastAPI app or Cloud Function handler
    │       ├── api/             # Routes and endpoints
    │       ├── models/          # Pydantic models
    │       ├── services/        # Business logic
@@ -93,6 +95,8 @@ fiap_gs2/
 3. Standard Flutter package structure:
    ```
    packages_dashboard/package_name/
+   ├── example/                    # Example app (if applicable)
+   ├── docs/                       # Package-specific documentation (if any)
    ├── lib/
    │   ├── src/                 # Private implementation
    │   │   ├── screens/
@@ -164,13 +168,6 @@ dependencies:
     path: ../other_package
 ```
 
-**R Scripts** (for analytics):
-```bash
-# In R console or RStudio
-install.packages(c("tidyverse", "ggplot2"))
-source("path/to/analysis_script.R")
-```
-
 ### Coding Standards - Non-Negotiable
 
 **Python**:
@@ -221,34 +218,29 @@ source("path/to/analysis_script.R")
   }
   ```
 
-**R**:
-- Tidyverse Style Guide
-- Use `<-` for assignment
-- snake_case for variables
-- Descriptive comments
-
 ### Security Requirements - Always Enforce
 
-1. **Never commit secrets**: Use `.env` (already in `.gitignore`), AWS Secrets Manager in prod
+1. **Never commit secrets**: Use `.env` (already in `.gitignore`), Google Cloud Secret Manager in prod
 2. **Environment variables required**:
    ```
-   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION
+   GOOGLE_CLOUD_PROJECT, GOOGLE_APPLICATION_CREDENTIALS
    OPENAI_API_KEY, ANTHROPIC_API_KEY
    JWT_SECRET_KEY (must be strong)
    ```
 3. **JWT tokens**: 15-60 min expiration, use refresh tokens
 4. **Input validation**: Use Pydantic (Python), validators (Dart) for all user inputs
 5. **HTTPS/TLS**: Mandatory in production
-6. **Rate limiting**: Configure in API Gateway
+6. **Rate limiting**: Configure in Cloud Load Balancing or API Gateway
 7. **Logging**: Never log secrets, passwords, or PII
 
 ### Testing Strategy
 
-**No tests exist yet** - when implementing:
+**Testing is mandatory** - when implementing:
 - **Python**: Write pytest tests alongside code, aim for 80%+ coverage
 - **Flutter**: Write widget and unit tests, use mockito for mocking
 - **Integration tests**: Test API endpoints with real HTTP calls (use test fixtures)
 - Test file naming: `test_<module_name>.py` or `<widget>_test.dart`
+- **All tests must be created and run before finalizing pull requests**
 
 ### CI/CD and Validation (To Be Implemented)
 
@@ -283,7 +275,7 @@ jobs:
           flutter test
 ```
 
-**Local CI emulation**: Run all tests + linting before committing
+**Local CI emulation**: Run all tests + linting before finalizing pull requests
 
 ### Common Patterns and Conventions
 
@@ -307,11 +299,11 @@ jobs:
 **Database Access**:
 - Repository pattern: separate data access from business logic
 - Use async operations for I/O
-- DynamoDB for events/logs, Aurora Serverless for relational data
+- Firestore for events/logs, Cloud SQL for relational data
 
 ### Project-Specific Constraints
 
-1. **Serverless-first**: All services must be deployable as Lambda functions
+1. **Serverless-first**: All services must be deployable as Cloud Functions
 2. **Stateless APIs**: No server-side sessions, use JWT
 3. **Multi-tenant**: Design for multiple schools/institutions (use tenant_id)
 4. **LGPD/GDPR**: Handle student data with care, implement data deletion
@@ -338,8 +330,8 @@ Each package has a detailed roadmap file (`packages/<package_name>/roadmap.md` o
 3. **Don't skip the approval interface** - human oversight is core to the project
 4. **Don't implement without reading roadmap** - detailed specs exist
 5. **Install packages in editable mode** - use `pip install -e .` for development
-6. **Lambda cold starts**: Optimize package size, use provisioned concurrency for critical paths
-7. **Serverless limits**: AWS Lambda 15min timeout, 10GB memory max
+6. **Cloud Functions cold starts**: Optimize package size, use min instances for critical paths
+7. **Serverless limits**: Cloud Functions 9min timeout (up to 60min), 2GB memory max (2nd gen higher)
 8. **Flutter web vs mobile**: Some features differ (file pickers, platform channels)
 9. **Package imports**: Use absolute imports from package name, not relative paths
 
@@ -381,4 +373,4 @@ Each package has a detailed roadmap file (`packages/<package_name>/roadmap.md` o
 
 ---
 
-**Last Updated**: 2025-11-10 | **Version**: 1.0 | **Project Phase**: Planning/Documentation
+**Last Updated**: 2025-11-11 | **Version**: 1.0 | **Project Phase**: Planning/Documentation

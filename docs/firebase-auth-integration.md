@@ -6,7 +6,7 @@ This guide explains how to integrate Firebase Authentication across the FIAP AI-
 
 The platform now uses **Firebase Authentication** for all authentication needs:
 - **Backend**: Python microservices use `auth_service` package with Firebase Admin SDK
-- **Frontend**: Flutter applications use `firebase_auth` package with Firebase Client SDK
+- **Frontend**: Flutter applications use `dashboard_auth` package with Firebase Client SDK
 - **Google Cloud Integration**: Service-to-service authentication for Vertex AI and other Google Cloud APIs
 
 ## 🏗️ Architecture
@@ -173,8 +173,8 @@ async def assign_role(
 ```yaml
 # pubspec.yaml
 dependencies:
-  firebase_auth:
-    path: ../firebase_auth
+  dashboard_auth:
+    path: ../dashboard_auth
 ```
 
 ### 2. Initialize Firebase
@@ -183,7 +183,7 @@ dependencies:
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -210,7 +210,7 @@ Future<void> main() async {
 // lib/screens/login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   @override
@@ -270,7 +270,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
 ```dart
 // lib/app.dart
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -290,7 +290,7 @@ class MyApp extends StatelessWidget {
 ```dart
 // lib/services/api_service.dart
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final dioProvider = Provider<Dio>((ref) {
@@ -319,7 +319,7 @@ class GradingService {
 ### 6. Role-Based UI
 
 ```dart
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 class AdminPanel extends StatelessWidget {
   @override
@@ -445,7 +445,7 @@ def test_protected_endpoint_with_token(client: TestClient, mock_firebase_token):
 ```dart
 // test/auth_test.dart
 import 'package:flutter_test/flutter_test.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 void main() {
   test('AuthUser hasRole works correctly', () {
@@ -504,6 +504,6 @@ For issues or questions:
 ## 🔗 Related Documentation
 
 - [auth_service README](../../packages/auth_service/README.md)
-- [firebase_auth README](../../packages_dashboard/firebase_auth/README.md)
+- [dashboard_auth README](../../packages_dashboard/dashboard_auth/README.md)
 - [Firebase Auth Docs](https://firebase.google.com/docs/auth)
 - [Vertex AI Docs](https://cloud.google.com/vertex-ai/docs)

@@ -23,7 +23,7 @@ Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
   firebase_auth:
-    path: ../firebase_auth
+    path: ../dashboard_auth
 ```
 
 Then run:
@@ -53,7 +53,7 @@ flutter pub get
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,7 +84,7 @@ Create a config file or use environment variables:
 
 ```dart
 // lib/config/firebase_config.dart
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 FirebaseConfig getFirebaseConfig() {
   return FirebaseConfig(
@@ -107,7 +107,7 @@ In your `main.dart`:
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dashboard_auth/dashboard_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

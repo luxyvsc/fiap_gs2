@@ -1,4 +1,4 @@
-name: firebase_auth
+name: dashboard_auth
 description: Firebase Authentication package for Flutter frontend in FIAP AI-Enhanced Learning Platform
 version: 1.0.0
 publish_to: 'none'
