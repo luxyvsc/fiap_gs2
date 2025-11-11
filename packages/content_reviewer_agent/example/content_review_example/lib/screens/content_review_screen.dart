@@ -203,7 +203,7 @@ sentences for better readability.
                             const Icon(Icons.error, color: Colors.red),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: Text(
+                              child: SelectableText(
                                 _errorMessage!,
                                 style: const TextStyle(color: Colors.red),
                               ),
