@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:file_picker/file_picker.dart';
 import '../models/review_models.dart';
 import '../services/content_review_service.dart';
 import '../widgets/review_issue_card.dart';
 import '../widgets/review_summary_card.dart';
+
+enum ContentInputType { text, html, markdown, file }
 
 final reviewServiceProvider = Provider<ContentReviewService>((ref) {
   return ContentReviewService();
@@ -25,9 +30,11 @@ class _ContentReviewScreenState extends ConsumerState<ContentReviewScreen> {
   );
 
   ReviewType _selectedReviewType = ReviewType.fullReview;
+  ContentInputType _selectedInputType = ContentInputType.text;
   ReviewResult? _reviewResult;
   bool _isReviewing = false;
   String? _errorMessage;
+  String? _selectedFileName;
 
   @override
   void initState() {
@@ -89,6 +96,40 @@ sentences for better readability.
     }
   }
 
+  Future<void> _pickFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['txt', 'html', 'md', 'htm', 'markdown'],
+        withData: true,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final file = result.files.first;
+        if (file.bytes != null) {
+          final content = String.fromCharCodes(file.bytes!);
+          setState(() {
+            _contentController.text = content;
+            _selectedFileName = file.name;
+
+            // Auto-detect content type based on file extension
+            if (file.extension == 'html' || file.extension == 'htm') {
+              _selectedInputType = ContentInputType.html;
+            } else if (file.extension == 'md' || file.extension == 'markdown') {
+              _selectedInputType = ContentInputType.markdown;
+            } else {
+              _selectedInputType = ContentInputType.text;
+            }
+          });
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error loading file: ${e.toString()}';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,14 +178,112 @@ sentences for better readability.
                     ),
                     const SizedBox(height: 16),
 
+                    // Input type selector
+                    DropdownButtonFormField<ContentInputType>(
+                      initialValue: _selectedInputType,
+                      decoration: const InputDecoration(
+                        labelText: 'Content Type',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.text_format),
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: ContentInputType.text,
+                          child: Text('Plain Text'),
+                        ),
+                        DropdownMenuItem(
+                          value: ContentInputType.html,
+                          child: Text('HTML'),
+                        ),
+                        DropdownMenuItem(
+                          value: ContentInputType.markdown,
+                          child: Text('Markdown'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            _selectedInputType = value;
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // File picker button
+                    OutlinedButton.icon(
+                      onPressed: _pickFile,
+                      icon: const Icon(Icons.file_upload),
+                      label: Text(
+                        _selectedFileName ??
+                            'Load from File (.txt, .html, .md)',
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Content preview/editor
+                    if (_selectedInputType == ContentInputType.html) ...[
+                      Container(
+                        constraints: const BoxConstraints(maxHeight: 300),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: SingleChildScrollView(
+                          padding: const EdgeInsets.all(8),
+                          child: Html(
+                            data: _contentController.text.isEmpty
+                                ? '<p>HTML preview will appear here...</p>'
+                                : _contentController.text,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'HTML Source:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                    ] else if (_selectedInputType ==
+                        ContentInputType.markdown) ...[
+                      Container(
+                        constraints: const BoxConstraints(maxHeight: 300),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Markdown(
+                          data: _contentController.text.isEmpty
+                              ? 'Markdown preview will appear here...'
+                              : _contentController.text,
+                          shrinkWrap: true,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Markdown Source:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+
                     // Content
                     TextField(
                       controller: _contentController,
-                      maxLines: 15,
-                      decoration: const InputDecoration(
+                      maxLines:
+                          _selectedInputType == ContentInputType.text ? 15 : 10,
+                      decoration: InputDecoration(
                         labelText: 'Content',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                         alignLabelWithHint: true,
+                        helperText: _selectedInputType == ContentInputType.text
+                            ? 'Enter plain text content'
+                            : _selectedInputType == ContentInputType.html
+                                ? 'Enter HTML code'
+                                : 'Enter Markdown text',
                       ),
                     ),
                     const SizedBox(height: 16),
