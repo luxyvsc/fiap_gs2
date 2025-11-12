@@ -1,5 +1,6 @@
 """Tests for AI-powered error detection agent."""
 
+import os
 from unittest.mock import Mock, patch
 
 import pytest
@@ -7,6 +8,35 @@ import pytest
 from content_reviewer_agent.agents.error_detection import ErrorDetectionAgent
 from content_reviewer_agent.models.ai_schema import AIReviewIssue, AIReviewResponse
 from content_reviewer_agent.models.content import Content, ContentType, IssueType
+
+# Check if Google API key is available for real API tests
+HAS_GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY") is not None
+
+
+@pytest.mark.asyncio
+@pytest.mark.skipif(not HAS_GOOGLE_API_KEY, reason="GOOGLE_API_KEY not set")
+async def test_error_agent_with_real_api():
+    """Test error detection agent with real Google AI API."""
+    agent = ErrorDetectionAgent()
+    content = Content(
+        title="Test Content",
+        text="I recieve emails regularly. This is a tets of the system.",
+        content_type=ContentType.TEXT,
+    )
+
+    issues = await agent.review(content)
+
+    # Should find issues when using real API
+    assert isinstance(issues, list)
+    # Results may vary with real API, so just check structure
+    if len(issues) > 0:
+        assert hasattr(issues[0], "issue_type")
+        assert hasattr(issues[0], "severity")
+        assert hasattr(issues[0], "description")
+        assert hasattr(issues[0], "reviewed_by_agent")
+        # Verify agent name includes model
+        assert issues[0].reviewed_by_agent is not None
+        assert "gemini" in issues[0].reviewed_by_agent.lower()
 
 
 @pytest.mark.asyncio
@@ -45,6 +75,8 @@ async def test_error_agent_spelling():
         assert len(issues) >= 1
         spelling_issues = [i for i in issues if i.issue_type == IssueType.SPELLING]
         assert len(spelling_issues) >= 1
+        # Check that agent name is set
+        assert issues[0].reviewed_by_agent is not None
 
 
 @pytest.mark.asyncio

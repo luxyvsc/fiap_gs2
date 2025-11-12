@@ -87,6 +87,9 @@ class ReviewIssue(BaseModel):
     confidence: float = Field(
         default=1.0, ge=0.0, le=1.0, description="Confidence score (0-1)"
     )
+    reviewed_by_agent: Optional[str] = Field(
+        None, description="Name of the AI agent that reviewed this content"
+    )
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     model_config = {
@@ -99,6 +102,7 @@ class ReviewIssue(BaseModel):
                 "original_text": "recieve",
                 "suggested_fix": "receive",
                 "confidence": 0.95,
+                "reviewed_by_agent": "Error Detection Agent (Gemini 2.5 Flash)",
             }
         }
     }

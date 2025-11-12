@@ -85,7 +85,7 @@ class BaseAIAgent(ABC):
                 print("Empty response from AI model")
                 return []
         finally:
-            print('Review completed by agent:', self.name)
+            print("Review completed by agent:", self.name)
         # except Exception as e:
         #     print(f"Error in {self.name}: {e}")
         #     return []
@@ -177,6 +177,9 @@ class BaseAIAgent(ABC):
         Returns:
             ReviewIssue object
         """
+        # Generate agent name with model info
+        agent_name = f"{self.name} ({settings.google_model_name})"
+
         return ReviewIssue(
             content_id=content.content_id,
             issue_type=issue_type,
@@ -187,6 +190,7 @@ class BaseAIAgent(ABC):
             location=location,
             sources=sources or [],
             confidence=confidence,
+            reviewed_by_agent=agent_name,
         )
 
     def __repr__(self) -> str:

@@ -182,7 +182,9 @@ sentences for better readability.
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
                           : const Icon(Icons.rate_review),
-                      label: Text(_isReviewing ? 'Reviewing...' : 'Review Content'),
+                      label: Text(
+                        _isReviewing ? 'Reviewing...' : 'Review Content',
+                      ),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(16),
                       ),
@@ -266,7 +268,11 @@ sentences for better readability.
                               ),
                               child: const Row(
                                 children: [
-                                  Icon(Icons.check_circle, color: Colors.green, size: 32),
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green,
+                                    size: 32,
+                                  ),
                                   SizedBox(width: 16),
                                   Expanded(
                                     child: Text(
@@ -282,8 +288,9 @@ sentences for better readability.
                               ),
                             )
                           else
-                            ..._reviewResult!.issues
-                                .map((issue) => ReviewIssueCard(issue: issue)),
+                            ..._reviewResult!.issues.map(
+                              (issue) => ReviewIssueCard(issue: issue),
+                            ),
                         ],
                       ),
                     ),

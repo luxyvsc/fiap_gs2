@@ -5,13 +5,7 @@ library;
 import 'package:flutter/material.dart';
 
 /// Issue severity levels
-enum IssueSeverity {
-  critical,
-  high,
-  medium,
-  low,
-  info,
-}
+enum IssueSeverity { critical, high, medium, low, info }
 
 /// Types of issues
 enum IssueType {
@@ -47,6 +41,7 @@ class ReviewIssue {
   final String? suggestedFix;
   final List<String> sources;
   final double confidence;
+  final String? reviewedByAgent;
   final DateTime createdAt;
 
   const ReviewIssue({
@@ -60,6 +55,7 @@ class ReviewIssue {
     this.suggestedFix,
     this.sources = const [],
     required this.confidence,
+    this.reviewedByAgent,
     required this.createdAt,
   });
 
@@ -79,11 +75,13 @@ class ReviewIssue {
       location: json['location'] as String?,
       originalText: json['original_text'] as String?,
       suggestedFix: json['suggested_fix'] as String?,
-      sources: (json['sources'] as List<dynamic>?)
+      sources:
+          (json['sources'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
       confidence: (json['confidence'] as num?)?.toDouble() ?? 1.0,
+      reviewedByAgent: json['reviewed_by_agent'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -164,12 +162,14 @@ class ReviewResult {
         orElse: () => ReviewType.fullReview,
       ),
       status: json['status'] as String,
-      issues: (json['issues'] as List<dynamic>?)
+      issues:
+          (json['issues'] as List<dynamic>?)
               ?.map((e) => ReviewIssue.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
       summary: json['summary'] as String? ?? '',
-      recommendations: (json['recommendations'] as List<dynamic>?)
+      recommendations:
+          (json['recommendations'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],

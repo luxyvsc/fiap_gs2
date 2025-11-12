@@ -1,6 +1,5 @@
 // Basic widget test for content review example app
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:content_review_example/main.dart';
 

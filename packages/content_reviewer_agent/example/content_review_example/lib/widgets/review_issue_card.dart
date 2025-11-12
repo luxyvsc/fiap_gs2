@@ -4,10 +4,7 @@ import '../models/review_models.dart';
 class ReviewIssueCard extends StatelessWidget {
   final ReviewIssue issue;
 
-  const ReviewIssueCard({
-    required this.issue,
-    super.key,
-  });
+  const ReviewIssueCard({required this.issue, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +19,40 @@ class ReviewIssueCard extends StatelessWidget {
             // Header with icon, type, and severity
             Row(
               children: [
-                Icon(
-                  issue.typeIcon,
-                  color: issue.severityColor,
-                  size: 24,
-                ),
+                Icon(issue.typeIcon, color: issue.severityColor, size: 24),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     _formatIssueType(issue.issueType),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 _buildSeverityBadge(context),
               ],
             ),
+
+            // Agent information
+            if (issue.reviewedByAgent != null) ...[
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Icon(Icons.smart_toy, size: 14, color: Colors.grey),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      issue.reviewedByAgent!,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+
             const Divider(height: 16),
 
             // Description
@@ -56,9 +70,9 @@ class ReviewIssueCard extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     issue.location!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[700],
-                        ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
                   ),
                 ],
               ),
@@ -130,10 +144,7 @@ class ReviewIssueCard extends StatelessWidget {
                 runSpacing: 8,
                 children: issue.sources.map((source) {
                   return Chip(
-                    label: Text(
-                      source,
-                      style: const TextStyle(fontSize: 12),
-                    ),
+                    label: Text(source, style: const TextStyle(fontSize: 12)),
                     avatar: const Icon(Icons.link, size: 16),
                     visualDensity: VisualDensity.compact,
                   );
@@ -155,8 +166,8 @@ class ReviewIssueCard extends StatelessWidget {
                       issue.confidence > 0.8
                           ? Colors.green
                           : issue.confidence > 0.6
-                              ? Colors.orange
-                              : Colors.red,
+                          ? Colors.orange
+                          : Colors.red,
                     ),
                   ),
                 ),
@@ -191,7 +202,9 @@ class ReviewIssueCard extends StatelessWidget {
 
   String _formatIssueType(IssueType type) {
     return type.name[0].toUpperCase() +
-        type.name.substring(1).replaceAllMapped(
+        type.name
+            .substring(1)
+            .replaceAllMapped(
               RegExp(r'[A-Z]'),
               (match) => ' ${match.group(0)}',
             );

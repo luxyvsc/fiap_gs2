@@ -10,15 +10,16 @@ class ContentReviewService {
   final Logger _logger = Logger();
   final String baseUrl;
 
-  ContentReviewService({
-    String? baseUrl,
-    Dio? dio,
-  })  : baseUrl = baseUrl ?? 'http://localhost:8000',
-        _dio = dio ??
-            Dio(BaseOptions(
+  ContentReviewService({String? baseUrl, Dio? dio})
+    : baseUrl = baseUrl ?? 'http://localhost:8000',
+      _dio =
+          dio ??
+          Dio(
+            BaseOptions(
               connectTimeout: const Duration(seconds: 30),
               receiveTimeout: const Duration(seconds: 30),
-            ));
+            ),
+          );
 
   /// Get available agents information
   Future<List<AgentInfo>> getAgents() async {
@@ -51,9 +52,7 @@ class ContentReviewService {
         if (discipline != null) 'discipline': discipline,
       };
 
-      final queryParams = {
-        'review_type': _toSnakeCase(reviewType.name),
-      };
+      final queryParams = {'review_type': _toSnakeCase(reviewType.name)};
 
       _logger.i('Reviewing content: $title (${reviewType.name})');
 

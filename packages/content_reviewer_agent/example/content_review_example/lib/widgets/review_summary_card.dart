@@ -4,10 +4,7 @@ import '../models/review_models.dart';
 class ReviewSummaryCard extends StatelessWidget {
   final ReviewResult result;
 
-  const ReviewSummaryCard({
-    required this.result,
-    super.key,
-  });
+  const ReviewSummaryCard({required this.result, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +24,8 @@ class ReviewSummaryCard extends StatelessWidget {
                   child: Text(
                     'Review Summary',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 if (result.qualityScore != null)
@@ -38,10 +35,7 @@ class ReviewSummaryCard extends StatelessWidget {
             const Divider(height: 24),
 
             // Summary text
-            Text(
-              result.summary,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+            Text(result.summary, style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 16),
 
             // Issue counts
@@ -64,11 +58,7 @@ class ReviewSummaryCard extends StatelessWidget {
                   result.mediumCount,
                   Colors.yellow.shade700,
                 ),
-                _buildCountChip(
-                  'Low',
-                  result.lowCount,
-                  Colors.blue.shade700,
-                ),
+                _buildCountChip('Low', result.lowCount, Colors.blue.shade700),
               ],
             ),
 
@@ -77,9 +67,9 @@ class ReviewSummaryCard extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 'Recommendations',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               ...result.recommendations.map((rec) {
@@ -94,9 +84,7 @@ class ReviewSummaryCard extends StatelessWidget {
                         color: Colors.amber,
                       ),
                       const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(rec),
-                      ),
+                      Expanded(child: Text(rec)),
                     ],
                   ),
                 );
@@ -114,9 +102,9 @@ class ReviewSummaryCard extends StatelessWidget {
                     const SizedBox(width: 4),
                     Text(
                       _formatDateTime(result.createdAt),
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[700],
-                          ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: Colors.grey[700]),
                     ),
                   ],
                 ),
@@ -127,9 +115,9 @@ class ReviewSummaryCard extends StatelessWidget {
                     Text(
                       result.status.toUpperCase(),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[700],
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -146,8 +134,8 @@ class ReviewSummaryCard extends StatelessWidget {
     final color = score >= 80
         ? Colors.green
         : score >= 60
-            ? Colors.orange
-            : Colors.red;
+        ? Colors.orange
+        : Colors.red;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -166,13 +154,7 @@ class ReviewSummaryCard extends StatelessWidget {
               color: color,
             ),
           ),
-          Text(
-            'Quality',
-            style: TextStyle(
-              fontSize: 10,
-              color: color,
-            ),
-          ),
+          Text('Quality', style: TextStyle(fontSize: 10, color: color)),
         ],
       ),
     );
