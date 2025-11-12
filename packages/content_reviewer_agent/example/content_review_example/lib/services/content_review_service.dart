@@ -170,10 +170,12 @@ class ContentReviewService {
   }
 
   String _toSnakeCase(String str) {
-    return str.replaceAllMapped(
+    final result = str.replaceAllMapped(
       RegExp(r'[A-Z]'),
       (match) => '_${match.group(0)!.toLowerCase()}',
-    ).replaceFirst('_', '');
+    );
+    // Remove leading underscore only if string starts with it
+    return result.startsWith('_') ? result.substring(1) : result;
   }
 }
 
