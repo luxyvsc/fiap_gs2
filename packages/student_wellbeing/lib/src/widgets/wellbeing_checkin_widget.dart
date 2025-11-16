@@ -24,8 +24,7 @@ class WellbeingCheckinWidget extends StatefulWidget {
   });
 
   @override
-  State<WellbeingCheckinWidget> createState() =>
-      _WellbeingCheckinWidgetState();
+  State<WellbeingCheckinWidget> createState() => _WellbeingCheckinWidgetState();
 }
 
 class _WellbeingCheckinWidgetState extends State<WellbeingCheckinWidget> {
@@ -187,18 +186,14 @@ class _WellbeingCheckinWidgetState extends State<WellbeingCheckinWidget> {
             label:
                 'Stress level slider. Current value: ${_stressLabels[_stressLevel - 1]}',
             value: _stressLabels[_stressLevel - 1],
-            increasedValue: _stressLevel < 5
-                ? _stressLabels[_stressLevel]
-                : null,
-            decreasedValue: _stressLevel > 1
-                ? _stressLabels[_stressLevel - 2]
-                : null,
-            onIncrease: _stressLevel < 5
-                ? () => setState(() => _stressLevel++)
-                : null,
-            onDecrease: _stressLevel > 1
-                ? () => setState(() => _stressLevel--)
-                : null,
+            increasedValue:
+                _stressLevel < 5 ? _stressLabels[_stressLevel] : null,
+            decreasedValue:
+                _stressLevel > 1 ? _stressLabels[_stressLevel - 2] : null,
+            onIncrease:
+                _stressLevel < 5 ? () => setState(() => _stressLevel++) : null,
+            onDecrease:
+                _stressLevel > 1 ? () => setState(() => _stressLevel--) : null,
             child: Slider(
               value: _stressLevel.toDouble(),
               min: 1,
@@ -206,7 +201,8 @@ class _WellbeingCheckinWidgetState extends State<WellbeingCheckinWidget> {
               divisions: 4,
               label: _stressLabels[_stressLevel - 1],
               activeColor: _stressColors[_stressLevel - 1],
-              onChanged: (value) => setState(() => _stressLevel = value.toInt()),
+              onChanged: (value) =>
+                  setState(() => _stressLevel = value.toInt()),
             ),
           ),
           Row(
@@ -244,7 +240,8 @@ class _WellbeingCheckinWidgetState extends State<WellbeingCheckinWidget> {
           labelText: 'Notes (optional)',
           hintText: 'Share anything on your mind...',
           border: OutlineInputBorder(),
-          helperText: 'Optional. Will only be stored locally with your consent.',
+          helperText:
+              'Optional. Will only be stored locally with your consent.',
         ),
         maxLines: 3,
         onChanged: (value) => setState(() => _notes = value),
@@ -265,7 +262,8 @@ class _WellbeingCheckinWidgetState extends State<WellbeingCheckinWidget> {
         children: [
           Row(
             children: [
-              Icon(Icons.privacy_tip_outlined, color: Colors.blue[700], size: 20),
+              Icon(Icons.privacy_tip_outlined,
+                  color: Colors.blue[700], size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(

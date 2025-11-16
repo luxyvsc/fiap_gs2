@@ -222,8 +222,9 @@ class _EarlyAlertDashboardState extends State<EarlyAlertDashboard> {
       final day = sortedDays[i];
       final dayCheckins = checkinsByDay[day]!;
 
-      final avgMood = dayCheckins.map((c) => c.moodLevel).reduce((a, b) => a + b) /
-          dayCheckins.length;
+      final avgMood =
+          dayCheckins.map((c) => c.moodLevel).reduce((a, b) => a + b) /
+              dayCheckins.length;
       final avgStress =
           dayCheckins.map((c) => c.stressLevel).reduce((a, b) => a + b) /
               dayCheckins.length;
@@ -355,8 +356,7 @@ class _EarlyAlertDashboardState extends State<EarlyAlertDashboard> {
             getTooltipItems: (touchedSpots) {
               return touchedSpots.map((spot) {
                 final day = sortedDays[spot.x.toInt()];
-                final label =
-                    spot.barIndex == 0 ? 'Mood' : 'Stress';
+                final label = spot.barIndex == 0 ? 'Mood' : 'Stress';
                 return LineTooltipItem(
                   '$label: ${spot.y.toStringAsFixed(1)}\n${day.month}/${day.day}',
                   TextStyle(
@@ -489,9 +489,8 @@ class _EarlyAlertDashboardState extends State<EarlyAlertDashboard> {
                         ? Icons.trending_down
                         : Icons.trending_up,
                     size: 16,
-                    color: alert.percentageChange! < 0
-                        ? Colors.red
-                        : Colors.green,
+                    color:
+                        alert.percentageChange! < 0 ? Colors.red : Colors.green,
                   ),
                   const SizedBox(width: 4),
                   Text(

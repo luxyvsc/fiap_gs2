@@ -23,28 +23,28 @@ import '../models/wellbeing_score.dart';
 /// certified secure storage solutions and proper key management.
 ///
 /// ## Production TODOs for Security:
-/// 
+///
 /// 1. **Strong Encryption**: Replace flutter_secure_storage with hardware-backed
 ///    secure storage (HSM integration, Keystore/Keychain with attestation).
-///    
+///
 /// 2. **Backend Integration**: Implement real backend API with:
 ///    - TLS 1.3+ for transport security
 ///    - Certificate pinning to prevent MITM attacks
 ///    - OAuth 2.0 or JWT-based authentication
 ///    - Server-side data validation and sanitization
-///    
+///
 /// 3. **Key Management**: Implement proper cryptographic key management:
 ///    - Key rotation policies
 ///    - Secure key derivation (PBKDF2, Argon2)
 ///    - Hardware-backed key storage
 ///    - Separate encryption keys for different data types
-///    
+///
 /// 4. **Advanced Anonymization**: Implement differential privacy techniques
 ///    to further protect individual data in aggregate reports.
-///    
+///
 /// 5. **Audit Logging**: Implement comprehensive audit trails for all
 ///    data access and modifications (LGPD/GDPR requirement).
-///    
+///
 /// 6. **Data Residency**: Ensure data storage complies with jurisdictional
 ///    requirements (Brazil for LGPD, EU for GDPR).
 ///
@@ -73,7 +73,7 @@ class WellbeingMonitoringService {
   final double alertDropPercentThreshold;
   final int consecutiveLowMoodThreshold;
   final int movingAverageWindowSize;
-  
+
   /// Get current retention period in days
   int get retentionDays => _retentionDays;
 
@@ -255,7 +255,7 @@ class WellbeingMonitoringService {
   /// Sets a new retention period and triggers cleanup of old data.
   ///
   /// [days]: Number of days to retain data.
-  /// 
+  ///
   /// This will immediately purge any data older than the new retention period.
   Future<void> setRetention(int days) async {
     _logger.i('Updating retention period from $_retentionDays to $days days');
@@ -297,7 +297,7 @@ class WellbeingMonitoringService {
   /// Only processes check-ins where the user has consented to share.
   ///
   /// Returns a list of anonymized check-ins with sample size metadata.
-  /// 
+  ///
   /// TODO: Production: Implement server-side aggregation for additional privacy.
   List<Map<String, dynamic>> anonymizeBatchForSend() {
     final consentedCheckins =
@@ -324,8 +324,9 @@ class WellbeingMonitoringService {
     final batches = <Map<String, dynamic>>[];
     for (final entry in checkinsByDay.entries) {
       final dayCheckins = entry.value;
-      final avgMood = dayCheckins.map((c) => c.moodLevel).reduce((a, b) => a + b) /
-          dayCheckins.length;
+      final avgMood =
+          dayCheckins.map((c) => c.moodLevel).reduce((a, b) => a + b) /
+              dayCheckins.length;
       final avgStress =
           dayCheckins.map((c) => c.stressLevel).reduce((a, b) => a + b) /
               dayCheckins.length;
@@ -439,8 +440,7 @@ class WellbeingMonitoringService {
         final List<dynamic> jsonList = jsonDecode(data) as List<dynamic>;
         _checkins = jsonList
             .map(
-              (json) =>
-                  WellbeingCheckin.fromJson(json as Map<String, dynamic>),
+              (json) => WellbeingCheckin.fromJson(json as Map<String, dynamic>),
             )
             .toList();
       }
@@ -552,15 +552,16 @@ class WellbeingMonitoringService {
     // Compare current score with moving average of previous periods
     final movingAvg = computeMovingAverage();
     if (movingAvg != null && score.averageScore < movingAvg.averageScore) {
-      final dropPercent =
-          ((movingAvg.averageScore - score.averageScore) / movingAvg.averageScore) *
-              100;
+      final dropPercent = ((movingAvg.averageScore - score.averageScore) /
+              movingAvg.averageScore) *
+          100;
 
       if (dropPercent >= alertDropPercentThreshold) {
         _createAlert(
           clusterName: clusterName,
           alertType: AlertType.decliningTrend,
-          severity: dropPercent > 30 ? AlertSeverity.high : AlertSeverity.medium,
+          severity:
+              dropPercent > 30 ? AlertSeverity.high : AlertSeverity.medium,
           description:
               'Sudden drop in wellbeing detected: ${dropPercent.toStringAsFixed(1)}% decline',
           clusterSize: clusterSize,
