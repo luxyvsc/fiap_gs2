@@ -207,6 +207,119 @@ final service = WellbeingMonitoringService(
   retentionDays: 60,  // Keep data for 60 days
 );
 
+// Data older than retentionDays is automatically deleted after each check-in
+
+// Dynamically update retention period
+await service.setRetention(30);  // Change to 30 days and purge old data
+
+// Manually trigger data purge
+final removedCount = await service.purgeOldData();
+print('Removed $removedCount old check-ins');
+```
+
+### Moving Average Analysis
+
+Use moving averages for smoothed trend analysis:
+
+```dart
+final service = WellbeingMonitoringService(
+  movingAverageWindowSize: 7,  // Use last 7 check-ins for average
+);
+
+// Compute moving average (returns WellbeingScore or null)
+final movingAvg = service.computeMovingAverage();
+if (movingAvg != null) {
+  print('Moving average score: ${movingAvg.averageScore}');
+  print('Trend: ${movingAvg.trend > 0 ? "improving" : "declining"}');
+}
+
+// Custom window size
+final shortTermAvg = service.computeMovingAverage(windowSize: 3);
+```
+
+### Advanced Alert Detection
+
+Configure alert sensitivity:
+
+```dart
+final service = WellbeingMonitoringService(
+  alertDropPercentThreshold: 20.0,    // Alert on 20%+ drops
+  consecutiveLowMoodThreshold: 3,     // Alert after 3 consecutive low moods
+  stressThreshold: 4.0,               // Alert when avg stress >= 4.0
+  scoreThreshold: 40.0,               // Alert when score < 40.0
+);
+```
+
+### Integration with State Management
+
+#### Using with Provider
+
+```dart
+import 'package:provider/provider.dart';
+import 'package:student_wellbeing/student_wellbeing.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  final wellbeingService = WellbeingMonitoringService();
+  await wellbeingService.initialize();
+  
+  runApp(
+    Provider<WellbeingMonitoringService>.value(
+      value: wellbeingService,
+      child: MyApp(),
+    ),
+  );
+}
+
+// In widgets
+class CheckInScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final service = context.read<WellbeingMonitoringService>();
+    
+    return WellbeingCheckinWidget(
+      service: service,
+      studentId: 'current-student-id',
+      onCheckinRecorded: () {
+        // Navigate or update UI
+      },
+    );
+  }
+}
+```
+
+#### Singleton Pattern
+
+```dart
+class WellbeingServiceSingleton {
+  static final WellbeingServiceSingleton _instance = 
+      WellbeingServiceSingleton._internal();
+  
+  factory WellbeingServiceSingleton() => _instance;
+  
+  WellbeingServiceSingleton._internal();
+  
+  late final WellbeingMonitoringService service;
+  
+  Future<void> initialize() async {
+    service = WellbeingMonitoringService(
+      retentionDays: 30,
+      alertWindowDays: 7,
+    );
+    await service.initialize();
+  }
+}
+
+// Usage
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await WellbeingServiceSingleton().initialize();
+  runApp(MyApp());
+}
+
+// Access anywhere
+final service = WellbeingServiceSingleton().service;
 // Data older than retentionDays is automatically deleted
 ```
 
